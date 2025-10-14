@@ -8,6 +8,7 @@ import sys
 import os
 import tkinter as tk
 from tkinter import messagebox, ttk
+import customtkinter as ctk
 import logging
 from pathlib import Path
 
@@ -36,6 +37,9 @@ class SNPProcessorApp:
         self.version = "1.0.0"
         self.supported_formats = ['.s1p', '.s2p', '.vcf', '.bed', '.ped', '.csv', '.txt']
         
+        # Initialize CustomTkinter theme
+        self.setup_customtkinter()
+        
         # Initialize logging
         self.setup_logging()
         self.logger = logging.getLogger(__name__)
@@ -53,6 +57,24 @@ class SNPProcessorApp:
         self.current_data = None
         self.analysis_results = {}
         
+    def setup_customtkinter(self):
+        """Setup CustomTkinter theme and appearance."""
+        # Set appearance mode and default color theme
+        ctk.set_appearance_mode("system")  # Modes: "system" (standard), "dark", "light"
+        ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+        
+        # Custom color scheme (modern blue palette)
+        self.colors = {
+            'primary': '#1f538d',      # Deep blue
+            'secondary': '#14b8a6',    # Teal
+            'accent': '#8b5cf6',       # Purple
+            'success': '#10b981',      # Green
+            'warning': '#f59e0b',      # Amber
+            'error': '#ef4444',        # Red
+            'text_primary': '#1f2937', # Dark gray
+            'text_secondary': '#6b7280' # Medium gray
+        }
+    
     def setup_logging(self):
         """Setup application logging."""
         if setup_logger:
@@ -83,7 +105,7 @@ class SNPProcessorApp:
     
     def create_main_window(self):
         """Create and configure the main application window."""
-        self.root = tk.Tk()
+        self.root = ctk.CTk()
         self.root.title(f"{self.app_name} v{self.version}")
         
         # Set window size and position
@@ -143,6 +165,16 @@ class SNPProcessorApp:
         graph_menu.add_command(label="Histogram", command=self.create_histogram)
         graph_menu.add_command(label="Heatmap", command=self.create_heatmap)
         
+        # View menu
+        view_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="View", menu=view_menu)
+        
+        theme_menu = tk.Menu(view_menu, tearoff=0)
+        view_menu.add_cascade(label="Theme", menu=theme_menu)
+        theme_menu.add_command(label="Light Mode", command=lambda: self.set_theme("light"))
+        theme_menu.add_command(label="Dark Mode", command=lambda: self.set_theme("dark"))
+        theme_menu.add_command(label="System", command=lambda: self.set_theme("system"))
+        
         # Help menu
         help_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Help", menu=help_menu)
@@ -150,17 +182,18 @@ class SNPProcessorApp:
     
     def create_main_interface(self):
         """Create the main application interface."""
-        # Main container with paned window for resizable sections
-        main_paned = ttk.PanedWindow(self.root, orient=tk.HORIZONTAL)
-        main_paned.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        # Main container with grid layout
+        self.root.grid_columnconfigure(1, weight=3)  # Right panel gets more space
+        self.root.grid_columnconfigure(0, weight=1)  # Left panel
+        self.root.grid_rowconfigure(0, weight=1)
         
         # Left panel for file list and properties
-        left_frame = ttk.Frame(main_paned)
-        main_paned.add(left_frame, weight=1)
+        left_frame = ctk.CTkFrame(self.root, corner_radius=10)
+        left_frame.grid(row=0, column=0, sticky="nsew", padx=(10, 5), pady=10)
         
         # Right panel for graph display and results
-        right_frame = ttk.Frame(main_paned)
-        main_paned.add(right_frame, weight=3)
+        right_frame = ctk.CTkFrame(self.root, corner_radius=10)
+        right_frame.grid(row=0, column=1, sticky="nsew", padx=(5, 10), pady=10)
         
         # Create left panel components
         self.create_file_panel(left_frame)
@@ -170,61 +203,100 @@ class SNPProcessorApp:
     
     def create_file_panel(self, parent):
         """Create the file list and properties panel."""
+        # Configure grid for the parent frame
+        parent.grid_columnconfigure(0, weight=1)
+        parent.grid_rowconfigure(1, weight=1)  # File list area
+        parent.grid_rowconfigure(3, weight=1)  # Properties area
+        
         # File list section
-        file_label = ttk.Label(parent, text="Loaded Files", font=('Arial', 12, 'bold'))
-        file_label.pack(pady=(0, 5))
+        file_label = ctk.CTkLabel(parent, text="Loaded Files", font=ctk.CTkFont(size=14, weight="bold"))
+        file_label.grid(row=0, column=0, sticky="w", padx=15, pady=(15, 5))
         
-        # File listbox with scrollbar
-        file_frame = ttk.Frame(parent)
-        file_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
+        # File listbox (using CTkScrollableFrame as a container)
+        self.file_frame = ctk.CTkScrollableFrame(parent, height=200)
+        self.file_frame.grid(row=1, column=0, sticky="nsew", padx=15, pady=(0, 10))
         
-        self.file_listbox = tk.Listbox(file_frame, selectmode=tk.SINGLE)
-        file_scrollbar = ttk.Scrollbar(file_frame, orient=tk.VERTICAL, command=self.file_listbox.yview)
-        self.file_listbox.config(yscrollcommand=file_scrollbar.set)
+        # Buttons frame
+        buttons_frame = ctk.CTkFrame(parent)
+        buttons_frame.grid(row=2, column=0, sticky="ew", padx=15, pady=(0, 15))
+        buttons_frame.grid_columnconfigure(0, weight=1)
         
-        self.file_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        file_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        # Import button
+        import_button = ctk.CTkButton(
+            buttons_frame, 
+            text="Import Files", 
+            command=self.import_files,
+            height=35,
+            corner_radius=8,
+            font=ctk.CTkFont(size=12, weight="bold")
+        )
+        import_button.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
+        
+        # Theme toggle button
+        self.theme_button = ctk.CTkButton(
+            buttons_frame,
+            text="🌙 Dark",
+            command=self.toggle_theme,
+            height=30,
+            width=80,
+            corner_radius=8,
+            font=ctk.CTkFont(size=10),
+            fg_color=("gray70", "gray30")
+        )
+        self.theme_button.grid(row=1, column=0, sticky="ew", padx=5, pady=(0, 5))
         
         # Properties section
-        props_label = ttk.Label(parent, text="Properties", font=('Arial', 12, 'bold'))
-        props_label.pack(pady=(10, 5))
+        props_label = ctk.CTkLabel(parent, text="Properties", font=ctk.CTkFont(size=14, weight="bold"))
+        props_label.grid(row=3, column=0, sticky="w", padx=15, pady=(10, 5))
         
-        self.properties_text = tk.Text(parent, height=8, state=tk.DISABLED)
-        props_scrollbar = ttk.Scrollbar(parent, orient=tk.VERTICAL, command=self.properties_text.yview)
-        self.properties_text.config(yscrollcommand=props_scrollbar.set)
+        # Properties text area
+        self.properties_text = ctk.CTkTextbox(parent, height=200, state="disabled")
+        self.properties_text.grid(row=4, column=0, sticky="nsew", padx=15, pady=(0, 15))
         
-        self.properties_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        props_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        # Store file list for management
+        self.loaded_files_widgets = []
     
     def create_display_panel(self, parent):
         """Create the graph display and results panel."""
-        # Create notebook for tabbed interface
-        notebook = ttk.Notebook(parent)
-        notebook.pack(fill=tk.BOTH, expand=True)
+        # Configure grid for the parent frame
+        parent.grid_columnconfigure(0, weight=1)
+        parent.grid_rowconfigure(0, weight=1)
+        
+        # Create tabview for tabbed interface
+        self.tabview = ctk.CTkTabview(parent, corner_radius=10)
+        self.tabview.grid(row=0, column=0, sticky="nsew", padx=15, pady=15)
         
         # Graph display tab
-        graph_frame = ttk.Frame(notebook)
-        notebook.add(graph_frame, text="Graph Display")
+        self.tabview.add("Graph Display")
+        graph_tab = self.tabview.tab("Graph Display")
+        graph_tab.grid_columnconfigure(0, weight=1)
+        graph_tab.grid_rowconfigure(0, weight=1)
         
-        graph_label = ttk.Label(graph_frame, text="Graph visualization will appear here", 
-                               font=('Arial', 14), foreground='gray')
-        graph_label.pack(expand=True)
+        # Placeholder for graph display
+        self.graph_frame = ctk.CTkFrame(graph_tab, corner_radius=8)
+        self.graph_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        
+        self.graph_placeholder = ctk.CTkLabel(
+            self.graph_frame, 
+            text="Graph visualization will appear here", 
+            font=ctk.CTkFont(size=16),
+            text_color=("gray60", "gray40")
+        )
+        self.graph_placeholder.place(relx=0.5, rely=0.5, anchor="center")
         
         # Analysis results tab
-        results_frame = ttk.Frame(notebook)
-        notebook.add(results_frame, text="Analysis Results")
+        self.tabview.add("Analysis Results")
+        results_tab = self.tabview.tab("Analysis Results")
+        results_tab.grid_columnconfigure(0, weight=1)
+        results_tab.grid_rowconfigure(0, weight=1)
         
-        self.results_text = tk.Text(results_frame, wrap=tk.WORD, state=tk.DISABLED)
-        results_scrollbar = ttk.Scrollbar(results_frame, orient=tk.VERTICAL, command=self.results_text.yview)
-        self.results_text.config(yscrollcommand=results_scrollbar.set)
-        
-        self.results_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        results_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        # Results text area
+        self.results_text = ctk.CTkTextbox(results_tab, state="disabled")
+        self.results_text.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
     
     def setup_event_handlers(self):
         """Setup event handlers for the application."""
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        self.file_listbox.bind('<<ListboxSelect>>', self.on_file_select)
     
     # Event handler methods (placeholder implementations)
     def import_files(self):
@@ -291,12 +363,66 @@ class SNPProcessorApp:
             raise ValueError(f"Unsupported file format: {extension}")
     
     def update_file_list(self):
-        """Update the file listbox with loaded files."""
-        self.file_listbox.delete(0, tk.END)
+        """Update the file list with loaded files."""
+        # Clear existing file widgets
+        for widget in self.loaded_files_widgets:
+            widget.destroy()
+        self.loaded_files_widgets.clear()
         
-        for file_info in self.loaded_files:
+        # Add new file widgets
+        for i, file_info in enumerate(self.loaded_files):
+            # Create file item frame
+            file_item = ctk.CTkFrame(self.file_frame, corner_radius=8)
+            file_item.pack(fill="x", padx=5, pady=2)
+            
+            # File name and type
             display_name = f"{file_info['name']} ({file_info['type']})"
-            self.file_listbox.insert(tk.END, display_name)
+            file_label = ctk.CTkLabel(
+                file_item, 
+                text=display_name, 
+                font=ctk.CTkFont(size=11),
+                anchor="w"
+            )
+            file_label.pack(side="left", fill="x", expand=True, padx=10, pady=8)
+            
+            # Select button
+            select_btn = ctk.CTkButton(
+                file_item,
+                text="Select",
+                width=60,
+                height=24,
+                font=ctk.CTkFont(size=10),
+                command=lambda idx=i: self.select_file(idx)
+            )
+            select_btn.pack(side="right", padx=(5, 10), pady=4)
+            
+            self.loaded_files_widgets.append(file_item)
+    
+    def select_file(self, index):
+        """Select a file and update properties display."""
+        if 0 <= index < len(self.loaded_files):
+            file_info = self.loaded_files[index]
+            
+            # Update properties display
+            self.properties_text.configure(state="normal")
+            self.properties_text.delete("1.0", "end")
+            
+            properties_text = f"""File: {file_info['name']}
+Type: {file_info['type']}
+Path: {file_info['path']}
+Size: {file_info.get('size', 'Unknown')}
+Modified: {file_info.get('modified', 'Unknown')}
+
+Data Info:
+{file_info.get('info', 'No additional information available')}"""
+            
+            self.properties_text.insert("1.0", properties_text)
+            self.properties_text.configure(state="disabled")
+            
+            # Store current selection
+            self.current_data = file_info.get('data')
+            
+            self.logger.info(f"Selected file: {file_info['name']}")
     
     def save_project(self):
         """Save current project state."""
@@ -411,12 +537,17 @@ class SNPProcessorApp:
         """Create S1P-specific plots."""
         from visualization import S1PPlotter, show_s1p_plot_dialog
         
+        # Check if any files are loaded
+        if not self.loaded_files:
+            messagebox.showwarning("No Data", "Please import some files first.")
+            return
+        
         # Get selected file or first S1P file
         selected_file = self.get_selected_file()
-        if selected_file is None or selected_file['type'] != 'S1P':
-            s1p_files = [f for f in self.loaded_files if f['type'] == 'S1P']
+        if selected_file is None or selected_file.get('type') != 'S1P':
+            s1p_files = [f for f in self.loaded_files if f.get('type') == 'S1P']
             if not s1p_files:
-                messagebox.showwarning("No S1P Data", "No S1P files are currently loaded.")
+                messagebox.showwarning("No S1P Data", "No S1P files are currently loaded. Please import S1P files first.")
                 return
             selected_file = s1p_files[0]
         
@@ -455,37 +586,36 @@ class SNPProcessorApp:
             messagebox.showerror("Plot Error", f"Failed to create plot:\n{str(e)}")
     
     def get_selected_file(self):
-        """Get the currently selected file from the listbox."""
-        selection = self.file_listbox.curselection()
-        if not selection:
-            return None
+        """Get the currently selected file."""
+        # Return the current data if available
+        if hasattr(self, 'current_data') and self.current_data:
+            # Find the file info that matches the current data
+            for file_info in self.loaded_files:
+                if file_info.get('data') is self.current_data:
+                    return file_info
         
-        selected_index = selection[0]
-        if selected_index < len(self.loaded_files):
-            return self.loaded_files[selected_index]
+        # If no current selection, return the first file if available
+        if self.loaded_files:
+            return self.loaded_files[0]
+        
         return None
     
     def find_graph_display_frame(self):
         """Find the graph display frame in the GUI."""
-        # Navigate through the widget hierarchy to find the graph display area
-        # This is a bit of a hack, but works for our current GUI structure
-        def find_frame_with_text(widget, text):
+        # For CustomTkinter, we can directly access the graph_frame
+        if hasattr(self, 'graph_frame'):
+            return self.graph_frame
+        
+        # Fallback: look for the tabview and get the graph display tab
+        if hasattr(self, 'tabview'):
             try:
-                if hasattr(widget, 'winfo_children'):
-                    for child in widget.winfo_children():
-                        if isinstance(child, ttk.Notebook):
-                            for tab_id in child.tabs():
-                                tab_text = child.tab(tab_id, 'text')
-                                if tab_text == text:
-                                    return child.nametowidget(tab_id)
-                        result = find_frame_with_text(child, text)
-                        if result:
-                            return result
+                # Switch to Graph Display tab and return its content frame
+                self.tabview.set("Graph Display")
+                return self.tabview.tab("Graph Display")
             except:
                 pass
-            return None
         
-        return find_frame_with_text(self.root, "Graph Display")
+        return None
     
     def show_about(self):
         """Show about dialog."""
@@ -499,6 +629,32 @@ class SNPProcessorApp:
         Supported formats: {', '.join(self.supported_formats)}
         """
         messagebox.showinfo("About", about_text)
+    
+    def set_theme(self, theme_mode):
+        """Set the application theme."""
+        try:
+            ctk.set_appearance_mode(theme_mode)
+            self.logger.info(f"Theme changed to: {theme_mode}")
+            
+            # Update theme button text
+            if hasattr(self, 'theme_button'):
+                if theme_mode == "dark":
+                    self.theme_button.configure(text="☀️ Light")
+                elif theme_mode == "light":
+                    self.theme_button.configure(text="🌙 Dark")
+                else:
+                    self.theme_button.configure(text="🖥️ System")
+            
+        except Exception as e:
+            self.logger.error(f"Error changing theme: {e}")
+    
+    def toggle_theme(self):
+        """Toggle between light and dark themes."""
+        current_mode = ctk.get_appearance_mode()
+        if current_mode == "Dark":
+            self.set_theme("light")
+        else:
+            self.set_theme("dark")
     
     def on_closing(self):
         """Handle application closing."""

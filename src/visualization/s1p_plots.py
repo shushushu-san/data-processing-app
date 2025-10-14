@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import tkinter as tk
 from tkinter import ttk, messagebox
+import customtkinter as ctk
 from typing import Dict, Any, Optional, Tuple
 import logging
 
@@ -262,11 +263,11 @@ class S1PPlotter:
             logger.warning("No figure to embed")
             return
         
-        # Clear existing widgets
+        # Clear existing widgets (including placeholder)
         for widget in parent_frame.winfo_children():
             widget.destroy()
         
-        # Create canvas
+        # Create canvas with CustomTkinter compatible styling
         self.canvas = FigureCanvasTkAgg(self.figure, parent_frame)
         self.canvas.draw()
         
@@ -285,16 +286,30 @@ class S1PPlotter:
     
     def _create_control_buttons(self, parent_frame):
         """Create custom control buttons below the plot."""
-        button_frame = ttk.Frame(parent_frame)
-        button_frame.pack(side=tk.BOTTOM, fill=tk.X, pady=5)
+        button_frame = ctk.CTkFrame(parent_frame, corner_radius=8)
+        button_frame.pack(side=tk.BOTTOM, fill=tk.X, pady=5, padx=5)
         
         # Graph size button
-        ttk.Button(button_frame, text="グラフサイズ", 
-                  command=self._show_axis_range_dialog).pack(side=tk.LEFT, padx=5)
+        size_button = ctk.CTkButton(
+            button_frame, 
+            text="グラフサイズ", 
+            command=self._show_axis_range_dialog,
+            height=32,
+            corner_radius=6,
+            font=ctk.CTkFont(size=11)
+        )
+        size_button.pack(side=tk.LEFT, padx=5, pady=5)
         
         # Graph info edit button
-        ttk.Button(button_frame, text="グラフ情報編集", 
-                  command=self._show_graph_info_dialog).pack(side=tk.LEFT, padx=5)
+        info_button = ctk.CTkButton(
+            button_frame, 
+            text="グラフ情報編集", 
+            command=self._show_graph_info_dialog,
+            height=32,
+            corner_radius=6,
+            font=ctk.CTkFont(size=11)
+        )
+        info_button.pack(side=tk.LEFT, padx=5, pady=5)
     
     def _show_axis_range_dialog(self):
         """Show axis range setting dialog."""
@@ -364,9 +379,9 @@ class AxisRangeDialog:
         self.figure = figure
         self.result = False
         
-        self.dialog = tk.Toplevel(parent)
+        self.dialog = ctk.CTkToplevel(parent)
         self.dialog.title("グラフサイズ設定")
-        self.dialog.geometry("400x350")
+        self.dialog.geometry("450x400")
         self.dialog.transient(parent)
         self.dialog.grab_set()
         
@@ -384,10 +399,17 @@ class AxisRangeDialog:
     
     def create_widgets(self):
         """Create dialog widgets."""
-        main_frame = ttk.Frame(self.dialog)
-        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # Configure grid
+        self.dialog.grid_columnconfigure(0, weight=1)
+        self.dialog.grid_rowconfigure(0, weight=1)
         
-        ttk.Label(main_frame, text="軸範囲設定", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(0, 10))
+        # Main scrollable frame
+        main_frame = ctk.CTkScrollableFrame(self.dialog)
+        main_frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
+        
+        # Title
+        title_label = ctk.CTkLabel(main_frame, text="軸範囲設定", font=ctk.CTkFont(size=16, weight="bold"))
+        title_label.pack(pady=(0, 15))
         
         # Create entry fields for each axis
         self.entries = {}
@@ -398,34 +420,46 @@ class AxisRangeDialog:
             else:
                 frame_title = "軸設定"
             
-            axis_frame = ttk.LabelFrame(main_frame, text=frame_title)
-            axis_frame.pack(fill=tk.X, pady=5)
+            # Axis frame
+            axis_frame = ctk.CTkFrame(main_frame, corner_radius=10)
+            axis_frame.pack(fill="x", pady=10, padx=10)
+            
+            # Frame title
+            ctk.CTkLabel(axis_frame, text=frame_title, font=ctk.CTkFont(size=14, weight="bold")).pack(pady=(15, 10))
             
             # X-axis range
-            x_frame = ttk.Frame(axis_frame)
-            x_frame.pack(fill=tk.X, padx=5, pady=2)
+            x_frame = ctk.CTkFrame(axis_frame, corner_radius=8)
+            x_frame.pack(fill="x", padx=15, pady=5)
             
-            ttk.Label(x_frame, text="X軸範囲:", width=8).pack(side=tk.LEFT)
+            ctk.CTkLabel(x_frame, text="X軸範囲:", width=80, anchor="w").pack(side="left", padx=(10, 5), pady=10)
             
-            x_min_var = tk.StringVar(value=str(self.current_limits[i]['xlim'][0]))
-            x_max_var = tk.StringVar(value=str(self.current_limits[i]['xlim'][1]))
+            x_min_var = tk.StringVar(value=f"{self.current_limits[i]['xlim'][0]:.6f}")
+            x_max_var = tk.StringVar(value=f"{self.current_limits[i]['xlim'][1]:.6f}")
             
-            ttk.Entry(x_frame, textvariable=x_min_var, width=10).pack(side=tk.LEFT, padx=2)
-            ttk.Label(x_frame, text="～").pack(side=tk.LEFT)
-            ttk.Entry(x_frame, textvariable=x_max_var, width=10).pack(side=tk.LEFT, padx=2)
+            x_min_entry = ctk.CTkEntry(x_frame, textvariable=x_min_var, width=100)
+            x_min_entry.pack(side="left", padx=2, pady=10)
+            
+            ctk.CTkLabel(x_frame, text="～", width=20).pack(side="left")
+            
+            x_max_entry = ctk.CTkEntry(x_frame, textvariable=x_max_var, width=100)
+            x_max_entry.pack(side="left", padx=2, pady=10)
             
             # Y-axis range
-            y_frame = ttk.Frame(axis_frame)
-            y_frame.pack(fill=tk.X, padx=5, pady=2)
+            y_frame = ctk.CTkFrame(axis_frame, corner_radius=8)
+            y_frame.pack(fill="x", padx=15, pady=(5, 15))
             
-            ttk.Label(y_frame, text="Y軸範囲:", width=8).pack(side=tk.LEFT)
+            ctk.CTkLabel(y_frame, text="Y軸範囲:", width=80, anchor="w").pack(side="left", padx=(10, 5), pady=10)
             
-            y_min_var = tk.StringVar(value=str(self.current_limits[i]['ylim'][0]))
-            y_max_var = tk.StringVar(value=str(self.current_limits[i]['ylim'][1]))
+            y_min_var = tk.StringVar(value=f"{self.current_limits[i]['ylim'][0]:.6f}")
+            y_max_var = tk.StringVar(value=f"{self.current_limits[i]['ylim'][1]:.6f}")
             
-            ttk.Entry(y_frame, textvariable=y_min_var, width=10).pack(side=tk.LEFT, padx=2)
-            ttk.Label(y_frame, text="～").pack(side=tk.LEFT)
-            ttk.Entry(y_frame, textvariable=y_max_var, width=10).pack(side=tk.LEFT, padx=2)
+            y_min_entry = ctk.CTkEntry(y_frame, textvariable=y_min_var, width=100)
+            y_min_entry.pack(side="left", padx=2, pady=10)
+            
+            ctk.CTkLabel(y_frame, text="～", width=20).pack(side="left")
+            
+            y_max_entry = ctk.CTkEntry(y_frame, textvariable=y_max_var, width=100)
+            y_max_entry.pack(side="left", padx=2, pady=10)
             
             self.entries[i] = {
                 'x_min': x_min_var,
@@ -435,14 +469,20 @@ class AxisRangeDialog:
             }
         
         # Auto-scale button
-        ttk.Button(main_frame, text="自動調整", command=self.auto_scale).pack(pady=5)
+        auto_button = ctk.CTkButton(main_frame, text="自動調整", command=self.auto_scale, height=35, corner_radius=8)
+        auto_button.pack(pady=15)
         
-        # Buttons
-        button_frame = ttk.Frame(main_frame)
-        button_frame.pack(fill=tk.X, pady=10)
+        # Bottom buttons
+        button_frame = ctk.CTkFrame(main_frame, corner_radius=8)
+        button_frame.pack(fill="x", pady=(10, 0), padx=10)
         
-        ttk.Button(button_frame, text="適用", command=self.apply_changes).pack(side=tk.RIGHT, padx=5)
-        ttk.Button(button_frame, text="キャンセル", command=self.cancel).pack(side=tk.RIGHT)
+        cancel_btn = ctk.CTkButton(button_frame, text="キャンセル", command=self.cancel, 
+                                  height=35, corner_radius=8, fg_color=("gray70", "gray30"))
+        cancel_btn.pack(side="right", padx=(5, 15), pady=15)
+        
+        apply_btn = ctk.CTkButton(button_frame, text="適用", command=self.apply_changes, 
+                                 height=35, corner_radius=8)
+        apply_btn.pack(side="right", padx=5, pady=15)
     
     def center_dialog(self):
         """Center the dialog on the parent window."""
@@ -508,9 +548,9 @@ class GraphInfoDialog:
         self.figure = figure
         self.result = False
         
-        self.dialog = tk.Toplevel(parent)
+        self.dialog = ctk.CTkToplevel(parent)
         self.dialog.title("グラフ情報編集")
-        self.dialog.geometry("450x400")
+        self.dialog.geometry("500x450")
         self.dialog.transient(parent)
         self.dialog.grab_set()
         
@@ -529,10 +569,17 @@ class GraphInfoDialog:
     
     def create_widgets(self):
         """Create dialog widgets."""
-        main_frame = ttk.Frame(self.dialog)
-        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # Configure grid
+        self.dialog.grid_columnconfigure(0, weight=1)
+        self.dialog.grid_rowconfigure(0, weight=1)
         
-        ttk.Label(main_frame, text="グラフ情報編集", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(0, 10))
+        # Main scrollable frame
+        main_frame = ctk.CTkScrollableFrame(self.dialog)
+        main_frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
+        
+        # Title
+        title_label = ctk.CTkLabel(main_frame, text="グラフ情報編集", font=ctk.CTkFont(size=16, weight="bold"))
+        title_label.pack(pady=(0, 15))
         
         # Create entry fields for each axis
         self.entries = {}
@@ -543,35 +590,42 @@ class GraphInfoDialog:
             else:
                 frame_title = "グラフ設定"
             
-            axis_frame = ttk.LabelFrame(main_frame, text=frame_title)
-            axis_frame.pack(fill=tk.X, pady=5)
+            # Axis frame
+            axis_frame = ctk.CTkFrame(main_frame, corner_radius=10)
+            axis_frame.pack(fill="x", pady=10, padx=10)
+            
+            # Frame title
+            ctk.CTkLabel(axis_frame, text=frame_title, font=ctk.CTkFont(size=14, weight="bold")).pack(pady=(15, 10))
             
             # Title
-            title_frame = ttk.Frame(axis_frame)
-            title_frame.pack(fill=tk.X, padx=5, pady=2)
+            title_frame = ctk.CTkFrame(axis_frame, corner_radius=8)
+            title_frame.pack(fill="x", padx=15, pady=5)
             
-            ttk.Label(title_frame, text="タイトル:", width=10).pack(side=tk.LEFT)
+            ctk.CTkLabel(title_frame, text="タイトル:", width=90, anchor="w").pack(side="left", padx=(10, 5), pady=10)
             
             title_var = tk.StringVar(value=self.current_info[i]['title'])
-            ttk.Entry(title_frame, textvariable=title_var, width=40).pack(side=tk.LEFT, padx=2, fill=tk.X, expand=True)
+            title_entry = ctk.CTkEntry(title_frame, textvariable=title_var, width=300)
+            title_entry.pack(side="left", fill="x", expand=True, padx=(5, 10), pady=10)
             
             # X-axis label
-            xlabel_frame = ttk.Frame(axis_frame)
-            xlabel_frame.pack(fill=tk.X, padx=5, pady=2)
+            xlabel_frame = ctk.CTkFrame(axis_frame, corner_radius=8)
+            xlabel_frame.pack(fill="x", padx=15, pady=5)
             
-            ttk.Label(xlabel_frame, text="X軸ラベル:", width=10).pack(side=tk.LEFT)
+            ctk.CTkLabel(xlabel_frame, text="X軸ラベル:", width=90, anchor="w").pack(side="left", padx=(10, 5), pady=10)
             
             xlabel_var = tk.StringVar(value=self.current_info[i]['xlabel'])
-            ttk.Entry(xlabel_frame, textvariable=xlabel_var, width=40).pack(side=tk.LEFT, padx=2, fill=tk.X, expand=True)
+            xlabel_entry = ctk.CTkEntry(xlabel_frame, textvariable=xlabel_var, width=300)
+            xlabel_entry.pack(side="left", fill="x", expand=True, padx=(5, 10), pady=10)
             
             # Y-axis label
-            ylabel_frame = ttk.Frame(axis_frame)
-            ylabel_frame.pack(fill=tk.X, padx=5, pady=2)
+            ylabel_frame = ctk.CTkFrame(axis_frame, corner_radius=8)
+            ylabel_frame.pack(fill="x", padx=15, pady=(5, 15))
             
-            ttk.Label(ylabel_frame, text="Y軸ラベル:", width=10).pack(side=tk.LEFT)
+            ctk.CTkLabel(ylabel_frame, text="Y軸ラベル:", width=90, anchor="w").pack(side="left", padx=(10, 5), pady=10)
             
             ylabel_var = tk.StringVar(value=self.current_info[i]['ylabel'])
-            ttk.Entry(ylabel_frame, textvariable=ylabel_var, width=40).pack(side=tk.LEFT, padx=2, fill=tk.X, expand=True)
+            ylabel_entry = ctk.CTkEntry(ylabel_frame, textvariable=ylabel_var, width=300)
+            ylabel_entry.pack(side="left", fill="x", expand=True, padx=(5, 10), pady=10)
             
             self.entries[i] = {
                 'title': title_var,
@@ -579,12 +633,17 @@ class GraphInfoDialog:
                 'ylabel': ylabel_var
             }
         
-        # Buttons
-        button_frame = ttk.Frame(main_frame)
-        button_frame.pack(fill=tk.X, pady=10)
+        # Bottom buttons
+        button_frame = ctk.CTkFrame(main_frame, corner_radius=8)
+        button_frame.pack(fill="x", pady=(10, 0), padx=10)
         
-        ttk.Button(button_frame, text="適用", command=self.apply_changes).pack(side=tk.RIGHT, padx=5)
-        ttk.Button(button_frame, text="キャンセル", command=self.cancel).pack(side=tk.RIGHT)
+        cancel_btn = ctk.CTkButton(button_frame, text="キャンセル", command=self.cancel, 
+                                  height=35, corner_radius=8, fg_color=("gray70", "gray30"))
+        cancel_btn.pack(side="right", padx=(5, 15), pady=15)
+        
+        apply_btn = ctk.CTkButton(button_frame, text="適用", command=self.apply_changes, 
+                                 height=35, corner_radius=8)
+        apply_btn.pack(side="right", padx=5, pady=15)
     
     def center_dialog(self):
         """Center the dialog on the parent window."""
