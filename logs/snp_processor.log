@@ -11,3 +11,70 @@
 2025-10-14 15:49:15 - __main__ - INFO - Clustering analysis requested
 2025-10-14 15:49:21 - __main__ - INFO - Scatter plot requested
 2025-10-14 15:49:33 - __main__ - INFO - Application closing
+2025-10-14 16:32:39 - root - INFO - Logging initialized - Level: INFO
+2025-10-14 16:32:39 - root - INFO - Log file: logs\snp_processor.log
+2025-10-14 16:32:39 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-14 16:32:40 - __main__ - INFO - Main window created successfully
+2025-10-14 16:32:40 - __main__ - INFO - Application started successfully
+2025-10-14 16:32:47 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\programs\data-processing-app\data-processing-app\data\20251014-1.s1p
+2025-10-14 16:32:47 - data.s1p_loader - INFO - Successfully loaded S1P file with 201 data points
+2025-10-14 16:32:47 - __main__ - INFO - Loaded S1P file: 20251014-1.s1p
+2025-10-14 16:32:49 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-14 16:32:50 - __main__ - INFO - File selected: 20251014-1.s1p (S1P)
+2025-10-14 16:32:55 - visualization.s1p_plots - INFO - Created S11 magnitude plot
+2025-10-14 16:32:55 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-14 16:32:55 - __main__ - INFO - Created S1P magnitude plot for 20251014-1.s1p
+2025-10-14 16:44:32 - root - INFO - Logging initialized - Level: INFO
+2025-10-14 16:44:32 - root - INFO - Log file: logs\snp_processor.log
+2025-10-14 16:44:32 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-14 16:44:32 - __main__ - INFO - Main window created successfully
+2025-10-14 16:44:32 - __main__ - INFO - Application started successfully
+2025-10-14 16:44:39 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\programs\data-processing-app\data-processing-app\data\20251014-1.s1p
+2025-10-14 16:44:39 - data.s1p_loader - INFO - Successfully loaded S1P file with 201 data points
+2025-10-14 16:44:39 - __main__ - INFO - Loaded S1P file: 20251014-1.s1p
+2025-10-14 16:44:41 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-14 16:44:42 - __main__ - INFO - File selected: 20251014-1.s1p (S1P)
+2025-10-14 16:44:46 - visualization.s1p_plots - INFO - Created S11 magnitude plot
+2025-10-14 16:44:46 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame with custom toolbar
+2025-10-14 16:44:46 - __main__ - INFO - Created S1P magnitude plot for 20251014-1.s1p
+2025-10-14 16:45:28 - __main__ - INFO - Application closing
+2025-10-14 16:46:41 - root - INFO - Logging initialized - Level: INFO
+2025-10-14 16:46:41 - root - INFO - Log file: logs\snp_processor.log
+2025-10-14 16:46:41 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-14 16:46:41 - __main__ - INFO - Main window created successfully
+2025-10-14 16:46:41 - __main__ - INFO - Application started successfully
+2025-10-14 16:46:47 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\programs\data-processing-app\data-processing-app\data\20251014-1.s1p
+2025-10-14 16:46:47 - data.s1p_loader - INFO - Successfully loaded S1P file with 201 data points
+2025-10-14 16:46:47 - __main__ - INFO - Loaded S1P file: 20251014-1.s1p
+2025-10-14 16:46:48 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-14 16:46:50 - __main__ - INFO - File selected: 20251014-1.s1p (S1P)
+2025-10-14 16:46:58 - visualization.s1p_plots - INFO - Created S11 magnitude plot
+2025-10-14 16:46:58 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-14 16:46:58 - __main__ - INFO - Created S1P magnitude plot for 20251014-1.s1p
+2025-10-14 17:58:51 - root - INFO - Logging initialized - Level: INFO
+2025-10-14 17:58:51 - root - INFO - Log file: logs\snp_processor.log
+2025-10-14 17:58:51 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-14 17:58:52 - __main__ - INFO - Main window created successfully
+2025-10-14 17:58:52 - __main__ - INFO - Application started successfully
+2025-10-14 17:59:01 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\programs\data-processing-app\data-processing-app\data\20251014-1.s1p
+2025-10-14 17:59:01 - data.s1p_loader - INFO - Successfully loaded S1P file with 201 data points
+2025-10-14 17:59:01 - __main__ - INFO - Loaded S1P file: 20251014-1.s1p
+2025-10-14 17:59:03 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-14 17:59:04 - __main__ - INFO - File selected: 20251014-1.s1p (S1P)
+2025-10-14 17:59:11 - visualization.s1p_plots - INFO - Created S11 magnitude plot
+2025-10-14 17:59:11 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-14 17:59:11 - __main__ - INFO - Created S1P magnitude plot for 20251014-1.s1p
+2025-10-14 17:59:18 - __main__ - INFO - File selected: 20251014-1.s1p (S1P)
+2025-10-14 17:59:40 - __main__ - INFO - Application closing
+2025-10-14 18:01:41 - root - INFO - Logging initialized - Level: INFO
+2025-10-14 18:01:41 - root - INFO - Log file: logs\snp_processor.log
+2025-10-14 18:01:41 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-14 18:01:41 - __main__ - INFO - Main window created successfully
+2025-10-14 18:01:41 - __main__ - INFO - Application started successfully
+2025-10-14 18:01:53 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\programs\data-processing-app\data-processing-app\data\20251014-1.s1p
+2025-10-14 18:01:53 - data.s1p_loader - INFO - Successfully loaded S1P file with 201 data points
+2025-10-14 18:01:53 - __main__ - INFO - Loaded S1P file: 20251014-1.s1p
+2025-10-14 18:01:54 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-14 18:02:00 - visualization.s1p_plots - INFO - Created S11 magnitude plot
+2025-10-14 18:02:00 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-14 18:02:00 - __main__ - INFO - Created S1P magnitude plot for 20251014-1.s1p

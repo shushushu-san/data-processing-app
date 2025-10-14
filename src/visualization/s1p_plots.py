@@ -9,7 +9,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 import numpy as np
 import pandas as pd
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from typing import Dict, Any, Optional, Tuple
 import logging
 
@@ -278,7 +278,45 @@ class S1PPlotter:
         self.toolbar.pack(side=tk.TOP, fill=tk.X)
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         
+        # Add custom control buttons
+        self._create_control_buttons(parent_frame)
+        
         logger.info("Plot embedded in Tkinter frame")
+    
+    def _create_control_buttons(self, parent_frame):
+        """Create custom control buttons below the plot."""
+        button_frame = ttk.Frame(parent_frame)
+        button_frame.pack(side=tk.BOTTOM, fill=tk.X, pady=5)
+        
+        # Graph size button
+        ttk.Button(button_frame, text="グラフサイズ", 
+                  command=self._show_axis_range_dialog).pack(side=tk.LEFT, padx=5)
+        
+        # Graph info edit button
+        ttk.Button(button_frame, text="グラフ情報編集", 
+                  command=self._show_graph_info_dialog).pack(side=tk.LEFT, padx=5)
+    
+    def _show_axis_range_dialog(self):
+        """Show axis range setting dialog."""
+        if self.figure is None:
+            return
+        
+        dialog = AxisRangeDialog(self.canvas.get_tk_widget().winfo_toplevel(), self.figure)
+        self.canvas.get_tk_widget().winfo_toplevel().wait_window(dialog.dialog)
+        
+        if dialog.result:
+            self.canvas.draw()
+    
+    def _show_graph_info_dialog(self):
+        """Show graph information editing dialog."""
+        if self.figure is None:
+            return
+        
+        dialog = GraphInfoDialog(self.canvas.get_tk_widget().winfo_toplevel(), self.figure)
+        self.canvas.get_tk_widget().winfo_toplevel().wait_window(dialog.dialog)
+        
+        if dialog.result:
+            self.canvas.draw()
     
     def save_plot(self, filename: str, dpi: int = 300):
         """
@@ -309,6 +347,276 @@ class S1PPlotter:
         if self.toolbar is not None:
             self.toolbar.destroy()
             self.toolbar = None
+
+
+class AxisRangeDialog:
+    """Dialog for setting axis ranges."""
+    
+    def __init__(self, parent, figure):
+        """
+        Initialize axis range dialog.
+        
+        Args:
+            parent: Parent window
+            figure: Matplotlib figure object
+        """
+        self.parent = parent
+        self.figure = figure
+        self.result = False
+        
+        self.dialog = tk.Toplevel(parent)
+        self.dialog.title("グラフサイズ設定")
+        self.dialog.geometry("400x350")
+        self.dialog.transient(parent)
+        self.dialog.grab_set()
+        
+        # Get current axis limits
+        self.axes = self.figure.get_axes()
+        self.current_limits = {}
+        for i, ax in enumerate(self.axes):
+            self.current_limits[i] = {
+                'xlim': ax.get_xlim(),
+                'ylim': ax.get_ylim()
+            }
+        
+        self.create_widgets()
+        self.center_dialog()
+    
+    def create_widgets(self):
+        """Create dialog widgets."""
+        main_frame = ttk.Frame(self.dialog)
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        ttk.Label(main_frame, text="軸範囲設定", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(0, 10))
+        
+        # Create entry fields for each axis
+        self.entries = {}
+        
+        for i, ax in enumerate(self.axes):
+            if len(self.axes) > 1:
+                frame_title = f"軸 {i+1}"
+            else:
+                frame_title = "軸設定"
+            
+            axis_frame = ttk.LabelFrame(main_frame, text=frame_title)
+            axis_frame.pack(fill=tk.X, pady=5)
+            
+            # X-axis range
+            x_frame = ttk.Frame(axis_frame)
+            x_frame.pack(fill=tk.X, padx=5, pady=2)
+            
+            ttk.Label(x_frame, text="X軸範囲:", width=8).pack(side=tk.LEFT)
+            
+            x_min_var = tk.StringVar(value=str(self.current_limits[i]['xlim'][0]))
+            x_max_var = tk.StringVar(value=str(self.current_limits[i]['xlim'][1]))
+            
+            ttk.Entry(x_frame, textvariable=x_min_var, width=10).pack(side=tk.LEFT, padx=2)
+            ttk.Label(x_frame, text="～").pack(side=tk.LEFT)
+            ttk.Entry(x_frame, textvariable=x_max_var, width=10).pack(side=tk.LEFT, padx=2)
+            
+            # Y-axis range
+            y_frame = ttk.Frame(axis_frame)
+            y_frame.pack(fill=tk.X, padx=5, pady=2)
+            
+            ttk.Label(y_frame, text="Y軸範囲:", width=8).pack(side=tk.LEFT)
+            
+            y_min_var = tk.StringVar(value=str(self.current_limits[i]['ylim'][0]))
+            y_max_var = tk.StringVar(value=str(self.current_limits[i]['ylim'][1]))
+            
+            ttk.Entry(y_frame, textvariable=y_min_var, width=10).pack(side=tk.LEFT, padx=2)
+            ttk.Label(y_frame, text="～").pack(side=tk.LEFT)
+            ttk.Entry(y_frame, textvariable=y_max_var, width=10).pack(side=tk.LEFT, padx=2)
+            
+            self.entries[i] = {
+                'x_min': x_min_var,
+                'x_max': x_max_var,
+                'y_min': y_min_var,
+                'y_max': y_max_var
+            }
+        
+        # Auto-scale button
+        ttk.Button(main_frame, text="自動調整", command=self.auto_scale).pack(pady=5)
+        
+        # Buttons
+        button_frame = ttk.Frame(main_frame)
+        button_frame.pack(fill=tk.X, pady=10)
+        
+        ttk.Button(button_frame, text="適用", command=self.apply_changes).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(button_frame, text="キャンセル", command=self.cancel).pack(side=tk.RIGHT)
+    
+    def center_dialog(self):
+        """Center the dialog on the parent window."""
+        self.dialog.update_idletasks()
+        width = self.dialog.winfo_width()
+        height = self.dialog.winfo_height()
+        x = self.parent.winfo_x() + (self.parent.winfo_width() // 2) - (width // 2)
+        y = self.parent.winfo_y() + (self.parent.winfo_height() // 2) - (height // 2)
+        self.dialog.geometry(f'{width}x{height}+{x}+{y}')
+    
+    def auto_scale(self):
+        """Auto-scale all axes."""
+        for ax in self.axes:
+            ax.relim()
+            ax.autoscale()
+        
+        # Update entry fields with new limits
+        for i, ax in enumerate(self.axes):
+            xlim = ax.get_xlim()
+            ylim = ax.get_ylim()
+            
+            self.entries[i]['x_min'].set(f"{xlim[0]:.6f}")
+            self.entries[i]['x_max'].set(f"{xlim[1]:.6f}")
+            self.entries[i]['y_min'].set(f"{ylim[0]:.6f}")
+            self.entries[i]['y_max'].set(f"{ylim[1]:.6f}")
+    
+    def apply_changes(self):
+        """Apply the axis range changes."""
+        try:
+            for i, ax in enumerate(self.axes):
+                x_min = float(self.entries[i]['x_min'].get())
+                x_max = float(self.entries[i]['x_max'].get())
+                y_min = float(self.entries[i]['y_min'].get())
+                y_max = float(self.entries[i]['y_max'].get())
+                
+                ax.set_xlim(x_min, x_max)
+                ax.set_ylim(y_min, y_max)
+            
+            self.result = True
+            self.dialog.destroy()
+            
+        except ValueError as e:
+            tk.messagebox.showerror("エラー", f"無効な数値が入力されました: {e}")
+    
+    def cancel(self):
+        """Cancel changes."""
+        self.result = False
+        self.dialog.destroy()
+
+
+class GraphInfoDialog:
+    """Dialog for editing graph information."""
+    
+    def __init__(self, parent, figure):
+        """
+        Initialize graph info dialog.
+        
+        Args:
+            parent: Parent window
+            figure: Matplotlib figure object
+        """
+        self.parent = parent
+        self.figure = figure
+        self.result = False
+        
+        self.dialog = tk.Toplevel(parent)
+        self.dialog.title("グラフ情報編集")
+        self.dialog.geometry("450x400")
+        self.dialog.transient(parent)
+        self.dialog.grab_set()
+        
+        # Get current graph information
+        self.axes = self.figure.get_axes()
+        self.current_info = {}
+        for i, ax in enumerate(self.axes):
+            self.current_info[i] = {
+                'title': ax.get_title(),
+                'xlabel': ax.get_xlabel(),
+                'ylabel': ax.get_ylabel()
+            }
+        
+        self.create_widgets()
+        self.center_dialog()
+    
+    def create_widgets(self):
+        """Create dialog widgets."""
+        main_frame = ttk.Frame(self.dialog)
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        ttk.Label(main_frame, text="グラフ情報編集", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(0, 10))
+        
+        # Create entry fields for each axis
+        self.entries = {}
+        
+        for i, ax in enumerate(self.axes):
+            if len(self.axes) > 1:
+                frame_title = f"グラフ {i+1}"
+            else:
+                frame_title = "グラフ設定"
+            
+            axis_frame = ttk.LabelFrame(main_frame, text=frame_title)
+            axis_frame.pack(fill=tk.X, pady=5)
+            
+            # Title
+            title_frame = ttk.Frame(axis_frame)
+            title_frame.pack(fill=tk.X, padx=5, pady=2)
+            
+            ttk.Label(title_frame, text="タイトル:", width=10).pack(side=tk.LEFT)
+            
+            title_var = tk.StringVar(value=self.current_info[i]['title'])
+            ttk.Entry(title_frame, textvariable=title_var, width=40).pack(side=tk.LEFT, padx=2, fill=tk.X, expand=True)
+            
+            # X-axis label
+            xlabel_frame = ttk.Frame(axis_frame)
+            xlabel_frame.pack(fill=tk.X, padx=5, pady=2)
+            
+            ttk.Label(xlabel_frame, text="X軸ラベル:", width=10).pack(side=tk.LEFT)
+            
+            xlabel_var = tk.StringVar(value=self.current_info[i]['xlabel'])
+            ttk.Entry(xlabel_frame, textvariable=xlabel_var, width=40).pack(side=tk.LEFT, padx=2, fill=tk.X, expand=True)
+            
+            # Y-axis label
+            ylabel_frame = ttk.Frame(axis_frame)
+            ylabel_frame.pack(fill=tk.X, padx=5, pady=2)
+            
+            ttk.Label(ylabel_frame, text="Y軸ラベル:", width=10).pack(side=tk.LEFT)
+            
+            ylabel_var = tk.StringVar(value=self.current_info[i]['ylabel'])
+            ttk.Entry(ylabel_frame, textvariable=ylabel_var, width=40).pack(side=tk.LEFT, padx=2, fill=tk.X, expand=True)
+            
+            self.entries[i] = {
+                'title': title_var,
+                'xlabel': xlabel_var,
+                'ylabel': ylabel_var
+            }
+        
+        # Buttons
+        button_frame = ttk.Frame(main_frame)
+        button_frame.pack(fill=tk.X, pady=10)
+        
+        ttk.Button(button_frame, text="適用", command=self.apply_changes).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(button_frame, text="キャンセル", command=self.cancel).pack(side=tk.RIGHT)
+    
+    def center_dialog(self):
+        """Center the dialog on the parent window."""
+        self.dialog.update_idletasks()
+        width = self.dialog.winfo_width()
+        height = self.dialog.winfo_height()
+        x = self.parent.winfo_x() + (self.parent.winfo_width() // 2) - (width // 2)
+        y = self.parent.winfo_y() + (self.parent.winfo_height() // 2) - (height // 2)
+        self.dialog.geometry(f'{width}x{height}+{x}+{y}')
+    
+    def apply_changes(self):
+        """Apply the graph information changes."""
+        try:
+            for i, ax in enumerate(self.axes):
+                title = self.entries[i]['title'].get()
+                xlabel = self.entries[i]['xlabel'].get()
+                ylabel = self.entries[i]['ylabel'].get()
+                
+                ax.set_title(title, fontsize=14, fontweight='bold')
+                ax.set_xlabel(xlabel, fontsize=12)
+                ax.set_ylabel(ylabel, fontsize=12)
+            
+            self.result = True
+            self.dialog.destroy()
+            
+        except Exception as e:
+            tk.messagebox.showerror("エラー", f"設定の適用中にエラーが発生しました: {e}")
+    
+    def cancel(self):
+        """Cancel changes."""
+        self.result = False
+        self.dialog.destroy()
 
 
 class S1PPlotDialog:
