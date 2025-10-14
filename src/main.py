@@ -339,9 +339,16 @@ class SNPProcessorApp:
     def load_data_file(self, file_path):
         """Load a single data file based on its extension."""
         from data import S1PLoader
+        import os
+        from datetime import datetime
         
         file_path = Path(file_path)
         extension = file_path.suffix.lower()
+        
+        # Get file stats
+        file_stats = file_path.stat()
+        file_size = f"{file_stats.st_size / 1024:.1f} KB" if file_stats.st_size < 1024*1024 else f"{file_stats.st_size / (1024*1024):.1f} MB"
+        modified_time = datetime.fromtimestamp(file_stats.st_mtime).strftime("%Y-%m-%d %H:%M:%S")
         
         if extension == '.s1p':
             loader = S1PLoader()
@@ -354,7 +361,9 @@ class SNPProcessorApp:
                 'type': 'S1P',
                 'data': data_dict['data'],
                 'metadata': data_dict['metadata'],
-                'loader': loader
+                'loader': loader,
+                'size': file_size,
+                'modified': modified_time
             })
             
             self.logger.info(f"Loaded S1P file: {file_path.name}")
@@ -407,7 +416,11 @@ class SNPProcessorApp:
             self.properties_text.configure(state="normal")
             self.properties_text.delete("1.0", "end")
             
-            properties_text = f"""File: {file_info['name']}
+            # Build detailed properties text
+            if file_info['type'] == 'S1P':
+                properties_text = self._build_s1p_properties(file_info)
+            else:
+                properties_text = f"""File: {file_info['name']}
 Type: {file_info['type']}
 Path: {file_info['path']}
 Size: {file_info.get('size', 'Unknown')}
@@ -423,6 +436,54 @@ Data Info:
             self.current_data = file_info.get('data')
             
             self.logger.info(f"Selected file: {file_info['name']}")
+    
+    def _build_s1p_properties(self, file_info):
+        """Build detailed properties text for S1P files."""
+        properties_lines = []
+        properties_lines.append(f"File: {file_info['name']}")
+        properties_lines.append(f"Type: {file_info['type']}")
+        properties_lines.append(f"Path: {file_info['path']}")
+        properties_lines.append(f"Size: {file_info.get('size', 'Unknown')}")
+        properties_lines.append(f"Modified: {file_info.get('modified', 'Unknown')}")
+        properties_lines.append("")
+        
+        # S1P specific metadata
+        metadata = file_info.get('metadata', {})
+        properties_lines.append("=== S1P File Properties ===")
+        properties_lines.append(f"Instrument: {metadata.get('instrument', 'Unknown')}")
+        properties_lines.append(f"Frequency Unit: {metadata.get('frequency_unit', 'Hz')}")
+        properties_lines.append(f"Parameter Format: {metadata.get('parameter_format', 'DB')}")
+        properties_lines.append(f"Reference Impedance: {metadata.get('reference_impedance', 50)} Ω")
+        properties_lines.append("")
+        
+        # Data summary
+        data = file_info.get('data')
+        if data is not None and not data.empty:
+            properties_lines.append("=== Data Summary ===")
+            properties_lines.append(f"Data Points: {len(data)}")
+            
+            if 'Frequency_GHz' in data.columns:
+                freq_min, freq_max = data['Frequency_GHz'].min(), data['Frequency_GHz'].max()
+                properties_lines.append(f"Frequency Range: {freq_min:.3f} - {freq_max:.3f} GHz")
+            
+            if 'S11_Magnitude_dB' in data.columns:
+                mag_min, mag_max = data['S11_Magnitude_dB'].min(), data['S11_Magnitude_dB'].max()
+                properties_lines.append(f"Magnitude Range: {mag_min:.2f} - {mag_max:.2f} dB")
+            
+            if 'S11_Phase_deg' in data.columns:
+                phase_min, phase_max = data['S11_Phase_deg'].min(), data['S11_Phase_deg'].max()
+                properties_lines.append(f"Phase Range: {phase_min:.1f} - {phase_max:.1f} °")
+            
+            # Frequency step calculation
+            if 'Frequency_GHz' in data.columns and len(data) > 1:
+                freq_step_ghz = (data['Frequency_GHz'].iloc[1] - data['Frequency_GHz'].iloc[0])
+                freq_step_mhz = freq_step_ghz * 1000
+                properties_lines.append(f"Frequency Step: {freq_step_mhz:.2f} MHz")
+        else:
+            properties_lines.append("=== Data Summary ===")
+            properties_lines.append("No data available or data is empty")
+        
+        return "\n".join(properties_lines)
     
     def save_project(self):
         """Save current project state."""
@@ -451,10 +512,14 @@ Data Info:
     
     def create_scatter_plot(self):
         """Create a scatter plot or S1P-specific plot."""
+        self.logger.info("Scatter plot creation requested")
+        
         # Check if we have S1P data loaded
         s1p_files = [f for f in self.loaded_files if f['type'] == 'S1P']
+        self.logger.info(f"Found {len(s1p_files)} S1P files out of {len(self.loaded_files)} total files")
         
         if s1p_files:
+            self.logger.info("Creating S1P plot")
             self.create_s1p_plot()
         else:
             messagebox.showinfo("Scatter Plot", "Generic scatter plot functionality will be implemented here.")
@@ -588,7 +653,7 @@ Data Info:
     def get_selected_file(self):
         """Get the currently selected file."""
         # Return the current data if available
-        if hasattr(self, 'current_data') and self.current_data:
+        if hasattr(self, 'current_data') and self.current_data is not None:
             # Find the file info that matches the current data
             for file_info in self.loaded_files:
                 if file_info.get('data') is self.current_data:
@@ -604,6 +669,12 @@ Data Info:
         """Find the graph display frame in the GUI."""
         # For CustomTkinter, we can directly access the graph_frame
         if hasattr(self, 'graph_frame'):
+            # Switch to Graph Display tab first
+            if hasattr(self, 'tabview'):
+                try:
+                    self.tabview.set("Graph Display")
+                except:
+                    pass
             return self.graph_frame
         
         # Fallback: look for the tabview and get the graph display tab
@@ -612,9 +683,10 @@ Data Info:
                 # Switch to Graph Display tab and return its content frame
                 self.tabview.set("Graph Display")
                 return self.tabview.tab("Graph Display")
-            except:
-                pass
+            except Exception as e:
+                self.logger.error(f"Error accessing graph display tab: {e}")
         
+        self.logger.warning("Could not find graph display frame")
         return None
     
     def show_about(self):

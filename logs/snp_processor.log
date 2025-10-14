@@ -169,3 +169,42 @@
 2025-10-14 23:05:02 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
 2025-10-14 23:05:02 - __main__ - INFO - Created S1P magnitude plot for 20251014-1.s1p
 2025-10-14 23:06:30 - __main__ - INFO - Application closing
+2025-10-14 23:10:27 - root - INFO - Logging initialized - Level: INFO
+2025-10-14 23:10:27 - root - INFO - Log file: logs\snp_processor.log
+2025-10-14 23:10:27 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-14 23:10:27 - __main__ - INFO - Main window created successfully
+2025-10-14 23:10:27 - __main__ - INFO - Application started successfully
+2025-10-14 23:10:32 - __main__ - INFO - Theme changed to: dark
+2025-10-14 23:10:41 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\programs\data-processing-app\data-processing-app\data\20251014-1.s1p
+2025-10-14 23:10:41 - data.s1p_loader - INFO - Successfully loaded S1P file with 201 data points
+2025-10-14 23:10:41 - __main__ - INFO - Loaded S1P file: 20251014-1.s1p
+2025-10-14 23:10:42 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-14 23:10:43 - __main__ - INFO - Selected file: 20251014-1.s1p
+2025-10-14 23:11:23 - __main__ - INFO - Selected file: 20251014-1.s1p
+2025-10-14 23:14:00 - __main__ - INFO - Application closing
+2025-10-14 23:15:28 - root - INFO - Logging initialized - Level: INFO
+2025-10-14 23:15:28 - root - INFO - Log file: logs\snp_processor.log
+2025-10-14 23:15:28 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-14 23:15:28 - __main__ - INFO - Main window created successfully
+2025-10-14 23:15:28 - __main__ - INFO - Application started successfully
+2025-10-14 23:15:36 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\programs\data-processing-app\data-processing-app\data\20251014-1.s1p
+2025-10-14 23:15:36 - data.s1p_loader - INFO - Successfully loaded S1P file with 201 data points
+2025-10-14 23:15:36 - __main__ - INFO - Loaded S1P file: 20251014-1.s1p
+2025-10-14 23:15:37 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-14 23:15:39 - __main__ - INFO - Selected file: 20251014-1.s1p
+2025-10-14 23:16:08 - __main__ - INFO - Scatter plot creation requested
+2025-10-14 23:16:08 - __main__ - INFO - Found 1 S1P files out of 1 total files
+2025-10-14 23:16:08 - __main__ - INFO - Creating S1P plot
+2025-10-14 23:16:11 - visualization.s1p_plots - INFO - Created S11 magnitude plot
+2025-10-14 23:16:11 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-14 23:16:11 - __main__ - INFO - Created S1P magnitude plot for 20251014-1.s1p
+2025-10-14 23:16:15 - __main__ - INFO - Theme changed to: dark
+2025-10-14 23:16:39 - __main__ - INFO - Theme changed to: system
+2025-10-14 23:16:46 - __main__ - INFO - Theme changed to: light
+2025-10-14 23:16:49 - __main__ - INFO - Theme changed to: dark
+2025-10-14 23:16:50 - __main__ - INFO - Theme changed to: light
+2025-10-14 23:16:50 - __main__ - INFO - Theme changed to: dark
+2025-10-14 23:16:51 - __main__ - INFO - Theme changed to: light
+2025-10-14 23:19:44 - __main__ - INFO - Theme changed to: dark
+2025-10-14 23:19:45 - __main__ - INFO - Theme changed to: light
+2025-10-14 23:20:13 - __main__ - INFO - Application closing
