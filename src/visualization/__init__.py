@@ -1,7 +1,10 @@
 # Visualization package for SNP Data Processor
 # Provides graph creation and plotting functionality
 
-# Import visualization classes (will be implemented later)  
+# Import visualization classes
+from .s1p_plots import S1PPlotter, show_s1p_plot_dialog, create_s1p_plotter
+
+# Import other visualization classes (will be implemented later)  
 # from .plot_manager import PlotManager
 # from .scatter_plot import ScatterPlot
 # from .histogram import Histogram
@@ -41,6 +44,7 @@ EXPORT_FORMATS = {
 }
 
 __all__ = [
+    'S1PPlotter', 'show_s1p_plot_dialog', 'create_s1p_plotter',
     'PlotManager', 'ScatterPlot', 'Histogram', 'Heatmap',
     'DEFAULT_PLOT_CONFIG', 'COLOR_PALETTES', 'EXPORT_FORMATS'
 ]
