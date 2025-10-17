@@ -232,6 +232,19 @@ class SNPProcessorApp:
         )
         import_button.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
         
+        # Create Graph button
+        self.create_graph_button = ctk.CTkButton(
+            buttons_frame,
+            text="Create Graph",
+            command=self.create_graph_for_selected,
+            height=35,
+            corner_radius=8,
+            font=ctk.CTkFont(size=12, weight="bold"),
+            fg_color=("green", "darkgreen"),
+            state="disabled"  # Initially disabled until a file is selected
+        )
+        self.create_graph_button.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
+        
         # Theme toggle button
         self.theme_button = ctk.CTkButton(
             buttons_frame,
@@ -243,7 +256,7 @@ class SNPProcessorApp:
             font=ctk.CTkFont(size=10),
             fg_color=("gray70", "gray30")
         )
-        self.theme_button.grid(row=1, column=0, sticky="ew", padx=5, pady=(0, 5))
+        self.theme_button.grid(row=2, column=0, sticky="ew", padx=5, pady=(0, 5))
         
         # Properties section
         props_label = ctk.CTkLabel(parent, text="Properties", font=ctk.CTkFont(size=14, weight="bold"))
@@ -378,6 +391,22 @@ class SNPProcessorApp:
             widget.destroy()
         self.loaded_files_widgets.clear()
         
+        # Reset current selection
+        self.current_data = None
+        
+        # Clear properties display
+        if hasattr(self, 'properties_text'):
+            self.properties_text.configure(state="normal")
+            self.properties_text.delete("1.0", "end")
+            if not self.loaded_files:
+                self.properties_text.insert("1.0", "No files loaded. Click 'Import Files' to get started.")
+            self.properties_text.configure(state="disabled")
+        
+        # Disable Create Graph button if no files
+        if hasattr(self, 'create_graph_button'):
+            if not self.loaded_files:
+                self.create_graph_button.configure(state="disabled")
+        
         # Add new file widgets
         for i, file_info in enumerate(self.loaded_files):
             # Create file item frame
@@ -435,6 +464,10 @@ Data Info:
             # Store current selection
             self.current_data = file_info.get('data')
             
+            # Enable the Create Graph button
+            if hasattr(self, 'create_graph_button'):
+                self.create_graph_button.configure(state="normal")
+            
             self.logger.info(f"Selected file: {file_info['name']}")
     
     def _build_s1p_properties(self, file_info):
@@ -484,6 +517,62 @@ Data Info:
             properties_lines.append("No data available or data is empty")
         
         return "\n".join(properties_lines)
+    
+    def create_graph_for_selected(self):
+        """Create a graph for the currently selected file."""
+        selected_file = self.get_selected_file()
+        
+        if selected_file is None:
+            messagebox.showwarning("No Selection", "Please select a file first.")
+            return
+        
+        # Check file type and create appropriate graph
+        if selected_file.get('type') == 'S1P':
+            self.logger.info(f"Creating graph for selected S1P file: {selected_file['name']}")
+            self.create_s1p_plot_for_file(selected_file)
+        else:
+            messagebox.showinfo("Unsupported", f"Graph creation for {selected_file.get('type', 'Unknown')} files is not yet implemented.")
+            self.logger.info(f"Graph creation requested for unsupported file type: {selected_file.get('type')}")
+    
+    def create_s1p_plot_for_file(self, file_info):
+        """Create S1P plot for a specific file."""
+        from visualization import S1PPlotter, show_s1p_plot_dialog
+        
+        try:
+            # Show plot selection dialog
+            plot_type = show_s1p_plot_dialog(self.root, file_info['data'], file_info['metadata'])
+            
+            if plot_type is None:
+                return  # User cancelled
+            
+            # Create plotter
+            plotter = S1PPlotter()
+            
+            # Create the requested plot
+            if plot_type == "magnitude":
+                figure = plotter.create_magnitude_plot(file_info['data'], file_info['metadata'])
+            elif plot_type == "phase":
+                figure = plotter.create_phase_plot(file_info['data'], file_info['metadata'])
+            elif plot_type == "combined":
+                figure = plotter.create_combined_plot(file_info['data'], file_info['metadata'])
+            elif plot_type == "smith":
+                figure = plotter.create_smith_chart(file_info['data'], file_info['metadata'])
+            else:
+                messagebox.showerror("Error", f"Unknown plot type: {plot_type}")
+                return
+            
+            # Embed in GUI (find the graph display area)
+            graph_frame = self.find_graph_display_frame()
+            if graph_frame:
+                plotter.embed_in_tkinter(graph_frame)
+                self.logger.info(f"Successfully created {plot_type} plot for {file_info['name']}")
+            else:
+                messagebox.showerror("Error", "Could not find graph display area.")
+                self.logger.error("Could not find graph display frame")
+            
+        except Exception as e:
+            self.logger.error(f"Error creating S1P plot for {file_info['name']}: {e}")
+            messagebox.showerror("Plot Error", f"Failed to create plot for {file_info['name']}:\n{str(e)}")
     
     def save_project(self):
         """Save current project state."""
