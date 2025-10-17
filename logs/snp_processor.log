@@ -248,3 +248,34 @@
 2025-10-17 14:29:39 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
 2025-10-17 14:29:39 - __main__ - INFO - Successfully created magnitude plot for 20251014-1.s1p
 2025-10-17 14:29:51 - __main__ - INFO - Application closing
+2025-10-17 14:31:43 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 14:31:43 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 14:31:43 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 14:31:43 - __main__ - INFO - Main window created successfully
+2025-10-17 14:31:43 - __main__ - INFO - Application started successfully
+2025-10-17 14:32:09 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-1.s1p
+2025-10-17 14:32:09 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-17 14:32:09 - __main__ - INFO - Loaded S1P file: 20251017-1.s1p
+2025-10-17 14:32:09 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-2.s1p
+2025-10-17 14:32:09 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-17 14:32:09 - __main__ - INFO - Loaded S1P file: 20251017-2.s1p
+2025-10-17 14:32:09 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-3.s1p
+2025-10-17 14:32:09 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-17 14:32:09 - __main__ - INFO - Loaded S1P file: 20251017-3.s1p
+2025-10-17 14:32:10 - __main__ - INFO - Import completed: 3/3 files loaded
+2025-10-17 14:32:14 - __main__ - INFO - Theme changed to: dark
+2025-10-17 14:32:20 - __main__ - INFO - Selected file: 20251017-1.s1p
+2025-10-17 14:32:22 - __main__ - INFO - Selected file: 20251017-2.s1p
+2025-10-17 14:32:23 - __main__ - INFO - Selected file: 20251017-3.s1p
+2025-10-17 14:32:27 - __main__ - INFO - Creating graph for selected S1P file: 20251017-3.s1p
+2025-10-17 14:32:30 - visualization.s1p_plots - INFO - Created S11 magnitude plot
+2025-10-17 14:32:30 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-17 14:32:30 - __main__ - INFO - Successfully created magnitude plot for 20251017-3.s1p
+2025-10-17 14:32:43 - __main__ - INFO - Selected file: 20251017-2.s1p
+2025-10-17 14:32:45 - __main__ - INFO - Creating graph for selected S1P file: 20251017-2.s1p
+2025-10-17 14:32:49 - visualization.s1p_plots - INFO - Created S11 magnitude plot
+2025-10-17 14:32:49 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-17 14:32:49 - __main__ - INFO - Successfully created magnitude plot for 20251017-2.s1p
+2025-10-17 14:32:58 - __main__ - INFO - Theme changed to: light
+2025-10-17 14:32:59 - __main__ - INFO - Selected file: 20251017-1.s1p
+2025-10-17 14:33:04 - __main__ - INFO - Application closing

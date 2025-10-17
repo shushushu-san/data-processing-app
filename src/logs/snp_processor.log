@@ -1,0 +1,26 @@
+2025-10-17 14:39:30 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 14:39:30 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 14:39:30 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 14:39:31 - __main__ - INFO - Main window created successfully
+2025-10-17 14:39:31 - __main__ - INFO - Application started successfully
+2025-10-17 14:40:11 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-1.s1p
+2025-10-17 14:40:11 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-17 14:40:11 - __main__ - INFO - Loaded S1P file: 20251017-1.s1p
+2025-10-17 14:40:11 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-2.s1p
+2025-10-17 14:40:11 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-17 14:40:11 - __main__ - INFO - Loaded S1P file: 20251017-2.s1p
+2025-10-17 14:40:11 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-3.s1p
+2025-10-17 14:40:11 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-17 14:40:11 - __main__ - INFO - Loaded S1P file: 20251017-3.s1p
+2025-10-17 14:40:12 - __main__ - INFO - Import completed: 3/3 files loaded
+2025-10-17 14:40:13 - __main__ - INFO - Selected file: 20251017-1.s1p
+2025-10-17 14:40:15 - __main__ - INFO - Selected file: 20251017-2.s1p
+2025-10-17 14:40:18 - __main__ - INFO - Deselected file: 20251017-2.s1p
+2025-10-17 14:40:19 - __main__ - INFO - Selected file: 20251017-2.s1p
+2025-10-17 14:40:20 - __main__ - INFO - Selected file: 20251017-3.s1p
+2025-10-17 14:40:23 - __main__ - INFO - Creating overlaid graph for 3 S1P files
+2025-10-17 14:40:27 - visualization.s1p_plots - INFO - Created overlaid S11 magnitude plot for 3 files
+2025-10-17 14:40:27 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-17 14:40:27 - __main__ - INFO - Successfully created magnitude overlay plot for files: 20251017-1.s1p, 20251017-2.s1p, 20251017-3.s1p
+2025-10-17 14:41:25 - __main__ - INFO - Creating overlaid graph for 3 S1P files
+2025-10-17 14:41:58 - __main__ - INFO - Application closing

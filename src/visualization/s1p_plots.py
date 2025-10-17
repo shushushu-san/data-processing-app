@@ -252,6 +252,183 @@ class S1PPlotter:
         logger.info("Created S11 polar/Smith chart plot")
         return self.figure
     
+    def create_magnitude_overlay_plot(self, s1p_files: list) -> mpl_figure.Figure:
+        """
+        Create an overlaid magnitude plot for multiple S1P files.
+        
+        Args:
+            s1p_files: List of file info dictionaries with S1P data
+            
+        Returns:
+            matplotlib Figure object
+        """
+        self.figure = plt.figure(figsize=self.plot_style['figure_size'], 
+                                dpi=self.plot_style['dpi'],
+                                facecolor=self.plot_style['facecolor'])
+        
+        ax = self.figure.add_subplot(111)
+        
+        # Color palette for multiple files
+        colors = plt.cm.tab10(np.linspace(0, 1, len(s1p_files)))
+        
+        # Plot each file
+        for i, file_info in enumerate(s1p_files):
+            data = file_info['data']
+            label = file_info['name']
+            
+            ax.plot(data['Frequency_GHz'], data['S11_Magnitude_dB'], 
+                   color=colors[i], 
+                   linewidth=self.plot_style['line_width'],
+                   label=label)
+        
+        # Formatting
+        ax.set_xlabel('Frequency (GHz)', fontsize=12)
+        ax.set_ylabel('Magnitude (dB)', fontsize=12)
+        ax.set_title(f'S11 Magnitude Comparison ({len(s1p_files)} files)', fontsize=14, fontweight='bold')
+        ax.grid(True, alpha=self.plot_style['grid_alpha'])
+        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+        
+        self.figure.tight_layout()
+        
+        logger.info(f"Created overlaid S11 magnitude plot for {len(s1p_files)} files")
+        return self.figure
+    
+    def create_phase_overlay_plot(self, s1p_files: list) -> mpl_figure.Figure:
+        """
+        Create an overlaid phase plot for multiple S1P files.
+        
+        Args:
+            s1p_files: List of file info dictionaries with S1P data
+            
+        Returns:
+            matplotlib Figure object
+        """
+        self.figure = plt.figure(figsize=self.plot_style['figure_size'], 
+                                dpi=self.plot_style['dpi'],
+                                facecolor=self.plot_style['facecolor'])
+        
+        ax = self.figure.add_subplot(111)
+        
+        # Color palette for multiple files
+        colors = plt.cm.tab10(np.linspace(0, 1, len(s1p_files)))
+        
+        # Plot each file
+        for i, file_info in enumerate(s1p_files):
+            data = file_info['data']
+            label = file_info['name']
+            
+            ax.plot(data['Frequency_GHz'], data['S11_Phase_deg'], 
+                   color=colors[i], 
+                   linewidth=self.plot_style['line_width'],
+                   label=label)
+        
+        # Formatting
+        ax.set_xlabel('Frequency (GHz)', fontsize=12)
+        ax.set_ylabel('Phase (degrees)', fontsize=12)
+        ax.set_title(f'S11 Phase Comparison ({len(s1p_files)} files)', fontsize=14, fontweight='bold')
+        ax.grid(True, alpha=self.plot_style['grid_alpha'])
+        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+        
+        self.figure.tight_layout()
+        
+        logger.info(f"Created overlaid S11 phase plot for {len(s1p_files)} files")
+        return self.figure
+    
+    def create_combined_overlay_plot(self, s1p_files: list) -> mpl_figure.Figure:
+        """
+        Create an overlaid combined plot for multiple S1P files with dual y-axes.
+        
+        Args:
+            s1p_files: List of file info dictionaries with S1P data
+            
+        Returns:
+            matplotlib Figure object
+        """
+        self.figure = plt.figure(figsize=(12, 8), 
+                                dpi=self.plot_style['dpi'],
+                                facecolor=self.plot_style['facecolor'])
+        
+        # Create subplots for magnitude and phase
+        ax1 = self.figure.add_subplot(211)  # Top subplot for magnitude
+        ax2 = self.figure.add_subplot(212)  # Bottom subplot for phase
+        
+        # Color palette for multiple files
+        colors = plt.cm.tab10(np.linspace(0, 1, len(s1p_files)))
+        
+        # Plot magnitude for each file
+        for i, file_info in enumerate(s1p_files):
+            data = file_info['data']
+            label = file_info['name']
+            
+            ax1.plot(data['Frequency_GHz'], data['S11_Magnitude_dB'], 
+                    color=colors[i], linewidth=self.plot_style['line_width'], label=label)
+            
+            ax2.plot(data['Frequency_GHz'], data['S11_Phase_deg'], 
+                    color=colors[i], linewidth=self.plot_style['line_width'], label=label)
+        
+        # Formatting for magnitude plot
+        ax1.set_ylabel('Magnitude (dB)', fontsize=12)
+        ax1.set_title(f'S11 Magnitude & Phase Comparison ({len(s1p_files)} files)', fontsize=14, fontweight='bold')
+        ax1.grid(True, alpha=self.plot_style['grid_alpha'])
+        ax1.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+        
+        # Formatting for phase plot
+        ax2.set_xlabel('Frequency (GHz)', fontsize=12)
+        ax2.set_ylabel('Phase (degrees)', fontsize=12)
+        ax2.grid(True, alpha=self.plot_style['grid_alpha'])
+        ax2.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+        
+        self.figure.tight_layout()
+        
+        logger.info(f"Created combined overlay plot for {len(s1p_files)} files")
+        return self.figure
+    
+    def create_smith_chart_overlay(self, s1p_files: list) -> mpl_figure.Figure:
+        """
+        Create an overlaid Smith chart for multiple S1P files.
+        
+        Args:
+            s1p_files: List of file info dictionaries with S1P data
+            
+        Returns:
+            matplotlib Figure object
+        """
+        self.figure = plt.figure(figsize=(10, 10), 
+                                dpi=self.plot_style['dpi'],
+                                facecolor=self.plot_style['facecolor'])
+        
+        ax = self.figure.add_subplot(111, projection='polar')
+        
+        # Color palette for multiple files
+        colors = plt.cm.tab10(np.linspace(0, 1, len(s1p_files)))
+        
+        # Plot each file
+        for i, file_info in enumerate(s1p_files):
+            data = file_info['data']
+            label = file_info['name']
+            
+            # Convert S11 to complex reflection coefficient
+            mag_linear = data['S11_Magnitude_Linear']
+            phase_rad = data['S11_Phase_rad']
+            
+            ax.plot(phase_rad, mag_linear, color=colors[i], 
+                   linewidth=self.plot_style['line_width'], label=label)
+            
+            # Add some marker points for each file
+            marker_indices = np.linspace(0, len(data)-1, min(10, len(data)), dtype=int)
+            ax.scatter(phase_rad.iloc[marker_indices], mag_linear.iloc[marker_indices], 
+                      c=[colors[i]], s=20, alpha=0.7)
+        
+        ax.set_title(f'S11 Polar Plot Comparison ({len(s1p_files)} files)', fontsize=14, fontweight='bold')
+        ax.set_ylim(0, 1)
+        ax.grid(True)
+        ax.legend(bbox_to_anchor=(1.1, 1), loc='upper left')
+        
+        self.figure.tight_layout()
+        
+        logger.info(f"Created Smith chart overlay for {len(s1p_files)} files")
+        return self.figure
+    
     def embed_in_tkinter(self, parent_frame):
         """
         Embed the current figure in a Tkinter frame.

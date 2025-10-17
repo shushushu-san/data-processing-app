@@ -55,6 +55,7 @@ class SNPProcessorApp:
         # Data storage
         self.loaded_files = []
         self.current_data = None
+        self.selected_files = []  # Track multiple selected files
         self.analysis_results = {}
         
     def setup_customtkinter(self):
@@ -268,6 +269,7 @@ class SNPProcessorApp:
         
         # Store file list for management
         self.loaded_files_widgets = []
+        self.selected_file_widgets = {}  # Track selected file widgets for visual feedback
     
     def create_display_panel(self, parent):
         """Create the graph display and results panel."""
@@ -391,8 +393,10 @@ class SNPProcessorApp:
             widget.destroy()
         self.loaded_files_widgets.clear()
         
-        # Reset current selection
+        # Reset selection state
         self.current_data = None
+        self.selected_files.clear()
+        self.selected_file_widgets.clear()
         
         # Clear properties display
         if hasattr(self, 'properties_text'):
@@ -437,15 +441,79 @@ class SNPProcessorApp:
             self.loaded_files_widgets.append(file_item)
     
     def select_file(self, index):
-        """Select a file and update properties display."""
-        if 0 <= index < len(self.loaded_files):
-            file_info = self.loaded_files[index]
+        """Toggle file selection and update visual feedback."""
+        if not (0 <= index < len(self.loaded_files)):
+            return
             
-            # Update properties display
-            self.properties_text.configure(state="normal")
-            self.properties_text.delete("1.0", "end")
+        file_info = self.loaded_files[index]
+        file_widget = self.loaded_files_widgets[index]
+        
+        # Toggle selection
+        if index in self.selected_files:
+            # Deselect file
+            self.selected_files.remove(index)
+            # Reset visual appearance
+            file_widget.configure(fg_color=("gray90", "gray13"))
             
-            # Build detailed properties text
+            # Update button text
+            select_button = None
+            for child in file_widget.winfo_children():
+                if hasattr(child, 'cget') and hasattr(child, 'configure'):
+                    try:
+                        if child.cget('text') == 'Selected':
+                            select_button = child
+                            break
+                    except:
+                        pass
+            if select_button:
+                select_button.configure(text="Select", fg_color=("gray75", "gray25"))
+            
+            self.logger.info(f"Deselected file: {file_info['name']}")
+        else:
+            # Select file
+            self.selected_files.append(index)
+            # Change visual appearance
+            file_widget.configure(fg_color=("lightblue", "darkblue"))
+            
+            # Update button text
+            select_button = None
+            for child in file_widget.winfo_children():
+                if hasattr(child, 'cget') and hasattr(child, 'configure'):
+                    try:
+                        if child.cget('text') == 'Select':
+                            select_button = child
+                            break
+                    except:
+                        pass
+            if select_button:
+                select_button.configure(text="Selected", fg_color=("green", "darkgreen"))
+            
+            self.logger.info(f"Selected file: {file_info['name']}")
+        
+        # Update properties display with selected files
+        self.update_selection_properties()
+        
+        # Enable/disable Create Graph button based on selection
+        if hasattr(self, 'create_graph_button'):
+            if self.selected_files:
+                self.create_graph_button.configure(state="normal")
+            else:
+                self.create_graph_button.configure(state="disabled")
+    
+    def update_selection_properties(self):
+        """Update properties display to show information about selected files."""
+        self.properties_text.configure(state="normal")
+        self.properties_text.delete("1.0", "end")
+        
+        if not self.selected_files:
+            self.properties_text.insert("1.0", "No files selected. Click 'Select' button to choose files.")
+            self.properties_text.configure(state="disabled")
+            return
+        
+        # Show summary of selected files
+        if len(self.selected_files) == 1:
+            # Single file selected - show detailed properties
+            file_info = self.loaded_files[self.selected_files[0]]
             if file_info['type'] == 'S1P':
                 properties_text = self._build_s1p_properties(file_info)
             else:
@@ -453,22 +521,51 @@ class SNPProcessorApp:
 Type: {file_info['type']}
 Path: {file_info['path']}
 Size: {file_info.get('size', 'Unknown')}
-Modified: {file_info.get('modified', 'Unknown')}
-
-Data Info:
-{file_info.get('info', 'No additional information available')}"""
+Modified: {file_info.get('modified', 'Unknown')}"""
             
             self.properties_text.insert("1.0", properties_text)
-            self.properties_text.configure(state="disabled")
-            
-            # Store current selection
             self.current_data = file_info.get('data')
+        else:
+            # Multiple files selected - show summary
+            properties_lines = []
+            properties_lines.append(f"=== {len(self.selected_files)} Files Selected ===")
+            properties_lines.append("")
             
-            # Enable the Create Graph button
-            if hasattr(self, 'create_graph_button'):
-                self.create_graph_button.configure(state="normal")
+            s1p_count = 0
+            total_points = 0
             
-            self.logger.info(f"Selected file: {file_info['name']}")
+            for i, file_idx in enumerate(self.selected_files, 1):
+                file_info = self.loaded_files[file_idx]
+                properties_lines.append(f"{i}. {file_info['name']} ({file_info['type']})")
+                properties_lines.append(f"   Size: {file_info.get('size', 'Unknown')}")
+                
+                if file_info['type'] == 'S1P':
+                    s1p_count += 1
+                    data = file_info.get('data')
+                    if data is not None and not data.empty:
+                        points = len(data)
+                        properties_lines.append(f"   Data Points: {points}")
+                        total_points += points
+                        
+                        if 'Frequency_GHz' in data.columns:
+                            freq_min, freq_max = data['Frequency_GHz'].min(), data['Frequency_GHz'].max()
+                            properties_lines.append(f"   Frequency: {freq_min:.3f} - {freq_max:.3f} GHz")
+                
+                properties_lines.append("")
+            
+            if s1p_count > 0:
+                properties_lines.append(f"=== S1P Summary ===")
+                properties_lines.append(f"S1P Files: {s1p_count}")
+                properties_lines.append(f"Total Data Points: {total_points}")
+                if s1p_count > 1:
+                    properties_lines.append("Note: Multiple S1P files can be overlaid on the same graph")
+            
+            self.properties_text.insert("1.0", "\n".join(properties_lines))
+            # For multiple selection, set current_data to the first selected file's data
+            if self.selected_files:
+                self.current_data = self.loaded_files[self.selected_files[0]].get('data')
+        
+        self.properties_text.configure(state="disabled")
     
     def _build_s1p_properties(self, file_info):
         """Build detailed properties text for S1P files."""
@@ -519,20 +616,35 @@ Data Info:
         return "\n".join(properties_lines)
     
     def create_graph_for_selected(self):
-        """Create a graph for the currently selected file."""
-        selected_file = self.get_selected_file()
-        
-        if selected_file is None:
-            messagebox.showwarning("No Selection", "Please select a file first.")
+        """Create a graph for the currently selected files."""
+        if not self.selected_files:
+            messagebox.showwarning("No Selection", "Please select one or more files first.")
             return
         
-        # Check file type and create appropriate graph
-        if selected_file.get('type') == 'S1P':
-            self.logger.info(f"Creating graph for selected S1P file: {selected_file['name']}")
-            self.create_s1p_plot_for_file(selected_file)
+        # Get selected file objects
+        selected_file_objects = [self.loaded_files[i] for i in self.selected_files]
+        
+        # Check if all selected files are S1P
+        s1p_files = [f for f in selected_file_objects if f.get('type') == 'S1P']
+        
+        if not s1p_files:
+            messagebox.showwarning("Unsupported Files", "No S1P files are selected. Please select S1P files to create graphs.")
+            return
+        
+        if len(s1p_files) != len(selected_file_objects):
+            non_s1p_files = [f for f in selected_file_objects if f.get('type') != 'S1P']
+            file_names = [f['name'] for f in non_s1p_files]
+            messagebox.showwarning("Mixed File Types", 
+                                 f"Only S1P files will be graphed. The following files will be ignored:\n{', '.join(file_names)}")
+        
+        if len(s1p_files) == 1:
+            # Single file - use existing method
+            self.logger.info(f"Creating graph for selected S1P file: {s1p_files[0]['name']}")
+            self.create_s1p_plot_for_file(s1p_files[0])
         else:
-            messagebox.showinfo("Unsupported", f"Graph creation for {selected_file.get('type', 'Unknown')} files is not yet implemented.")
-            self.logger.info(f"Graph creation requested for unsupported file type: {selected_file.get('type')}")
+            # Multiple files - create overlaid graph
+            self.logger.info(f"Creating overlaid graph for {len(s1p_files)} S1P files")
+            self.create_s1p_overlay_plot(s1p_files)
     
     def create_s1p_plot_for_file(self, file_info):
         """Create S1P plot for a specific file."""
@@ -573,6 +685,57 @@ Data Info:
         except Exception as e:
             self.logger.error(f"Error creating S1P plot for {file_info['name']}: {e}")
             messagebox.showerror("Plot Error", f"Failed to create plot for {file_info['name']}:\n{str(e)}")
+    
+    def create_s1p_overlay_plot(self, s1p_files):
+        """Create overlaid S1P plots for multiple files."""
+        from visualization import S1PPlotter, show_s1p_plot_dialog
+        
+        try:
+            # Use the first file's data and metadata for the dialog
+            first_file = s1p_files[0]
+            plot_type = show_s1p_plot_dialog(self.root, first_file['data'], first_file['metadata'])
+            
+            if plot_type is None:
+                return  # User cancelled
+            
+            # Smith chart doesn't support overlay well, so handle it separately
+            if plot_type == "smith" and len(s1p_files) > 1:
+                response = messagebox.askyesno("Smith Chart Overlay", 
+                                             f"Smith chart overlay with {len(s1p_files)} files may be cluttered. "
+                                             "Do you want to continue?")
+                if not response:
+                    return
+            
+            # Create plotter
+            plotter = S1PPlotter()
+            
+            # Create the overlaid plot
+            if plot_type == "magnitude":
+                figure = plotter.create_magnitude_overlay_plot(s1p_files)
+            elif plot_type == "phase":
+                figure = plotter.create_phase_overlay_plot(s1p_files)
+            elif plot_type == "combined":
+                figure = plotter.create_combined_overlay_plot(s1p_files)
+            elif plot_type == "smith":
+                figure = plotter.create_smith_chart_overlay(s1p_files)
+            else:
+                messagebox.showerror("Error", f"Unknown plot type: {plot_type}")
+                return
+            
+            # Embed in GUI
+            graph_frame = self.find_graph_display_frame()
+            if graph_frame:
+                plotter.embed_in_tkinter(graph_frame)
+                file_names = [f['name'] for f in s1p_files]
+                self.logger.info(f"Successfully created {plot_type} overlay plot for files: {', '.join(file_names)}")
+            else:
+                messagebox.showerror("Error", "Could not find graph display area.")
+                self.logger.error("Could not find graph display frame")
+            
+        except Exception as e:
+            file_names = [f['name'] for f in s1p_files]
+            self.logger.error(f"Error creating S1P overlay plot for files {file_names}: {e}")
+            messagebox.showerror("Plot Error", f"Failed to create overlay plot:\n{str(e)}")
     
     def save_project(self):
         """Save current project state."""
@@ -740,19 +903,20 @@ Data Info:
             messagebox.showerror("Plot Error", f"Failed to create plot:\n{str(e)}")
     
     def get_selected_file(self):
-        """Get the currently selected file."""
-        # Return the current data if available
-        if hasattr(self, 'current_data') and self.current_data is not None:
-            # Find the file info that matches the current data
-            for file_info in self.loaded_files:
-                if file_info.get('data') is self.current_data:
-                    return file_info
+        """Get the first currently selected file."""
+        # Return the first selected file if any are selected
+        if self.selected_files:
+            return self.loaded_files[self.selected_files[0]]
         
         # If no current selection, return the first file if available
         if self.loaded_files:
             return self.loaded_files[0]
         
         return None
+    
+    def get_selected_files(self):
+        """Get all currently selected files."""
+        return [self.loaded_files[i] for i in self.selected_files]
     
     def find_graph_display_frame(self):
         """Find the graph display frame in the GUI."""
