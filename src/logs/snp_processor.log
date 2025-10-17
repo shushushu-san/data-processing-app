@@ -24,3 +24,76 @@
 2025-10-17 14:40:27 - __main__ - INFO - Successfully created magnitude overlay plot for files: 20251017-1.s1p, 20251017-2.s1p, 20251017-3.s1p
 2025-10-17 14:41:25 - __main__ - INFO - Creating overlaid graph for 3 S1P files
 2025-10-17 14:41:58 - __main__ - INFO - Application closing
+2025-10-17 14:56:57 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 14:56:57 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 14:56:57 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 14:56:58 - __main__ - INFO - Main window created successfully
+2025-10-17 14:56:58 - __main__ - INFO - Application started successfully
+2025-10-17 14:57:44 - data.dat_loader - INFO - Loading DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 14:57:44 - data.dat_loader - INFO - Read DAT file: 72 rows, 6 columns
+2025-10-17 14:57:44 - data.dat_loader - INFO - Data processing completed
+2025-10-17 14:57:44 - data.dat_loader - INFO - Successfully loaded DAT file with 72 data points
+2025-10-17 14:57:44 - __main__ - INFO - Loaded DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 14:57:45 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-17 14:57:55 - __main__ - INFO - Selected file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 14:58:10 - __main__ - INFO - Application closing
+2025-10-17 15:02:07 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 15:02:07 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 15:02:07 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 15:02:08 - __main__ - INFO - Main window created successfully
+2025-10-17 15:02:08 - __main__ - INFO - Application started successfully
+2025-10-17 15:02:22 - data.dat_loader - INFO - Loading DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:02:22 - data.dat_loader - INFO - Read DAT file: 72 rows, 6 columns
+2025-10-17 15:02:22 - data.dat_loader - INFO - Data processing completed
+2025-10-17 15:02:22 - data.dat_loader - INFO - Successfully loaded DAT file with 72 data points
+2025-10-17 15:02:22 - __main__ - INFO - Loaded DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:02:24 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-17 15:02:29 - __main__ - INFO - Selected file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:02:31 - __main__ - INFO - Creating graph for selected DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:02:56 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\programs\data-processing-app\data-processing-app\data\20251014-1.s1p
+2025-10-17 15:02:56 - data.s1p_loader - INFO - Successfully loaded S1P file with 201 data points
+2025-10-17 15:02:56 - __main__ - INFO - Loaded S1P file: 20251014-1.s1p
+2025-10-17 15:02:57 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-17 15:02:59 - __main__ - INFO - Selected file: 20251014-1.s1p
+2025-10-17 15:03:01 - __main__ - INFO - Creating graph for selected S1P file: 20251014-1.s1p
+2025-10-17 15:03:03 - visualization.s1p_plots - INFO - Created S11 magnitude plot
+2025-10-17 15:03:03 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-17 15:03:03 - __main__ - INFO - Successfully created magnitude plot for 20251014-1.s1p
+2025-10-17 15:03:10 - __main__ - INFO - Selected file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:03:12 - __main__ - INFO - Deselected file: 20251014-1.s1p
+2025-10-17 15:03:14 - __main__ - INFO - Creating graph for selected DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:08:00 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 15:08:00 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 15:08:00 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 15:08:01 - __main__ - INFO - Main window created successfully
+2025-10-17 15:08:01 - __main__ - INFO - Application started successfully
+2025-10-17 15:08:08 - __main__ - INFO - Application closing
+2025-10-17 15:08:18 - data.dat_loader - INFO - Loading DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:08:18 - data.dat_loader - INFO - Read DAT file: 72 rows, 6 columns
+2025-10-17 15:08:18 - data.dat_loader - INFO - Data processing completed
+2025-10-17 15:08:18 - data.dat_loader - INFO - Successfully loaded DAT file with 72 data points
+2025-10-17 15:08:18 - __main__ - INFO - Loaded DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:08:20 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-17 15:08:27 - __main__ - INFO - Selected file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:08:37 - __main__ - INFO - Creating graph for selected DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:09:01 - visualization.dat_plots - INFO - Created amplitude plot
+2025-10-17 15:09:01 - visualization.dat_plots - INFO - Plot embedded in Tkinter frame
+2025-10-17 15:09:01 - __main__ - INFO - Successfully created freq_amp plot for 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:11:00 - __main__ - INFO - Application closing
+2025-10-17 15:11:08 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 15:11:08 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 15:11:08 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 15:11:08 - __main__ - INFO - Main window created successfully
+2025-10-17 15:11:08 - __main__ - INFO - Application started successfully
+2025-10-17 15:11:18 - data.dat_loader - INFO - Loading DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:11:18 - data.dat_loader - INFO - Read DAT file: 72 rows, 6 columns
+2025-10-17 15:11:18 - data.dat_loader - INFO - Data processing completed
+2025-10-17 15:11:18 - data.dat_loader - INFO - Successfully loaded DAT file with 72 data points
+2025-10-17 15:11:18 - __main__ - INFO - Loaded DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:11:20 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-17 15:11:24 - __main__ - INFO - Selected file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:11:26 - __main__ - INFO - Creating graph for selected DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:11:31 - visualization.dat_plots - INFO - Created amplitude plot
+2025-10-17 15:11:31 - visualization.dat_plots - INFO - Plot embedded in Tkinter frame
+2025-10-17 15:11:31 - __main__ - INFO - Successfully created freq_amp plot for 20251017-1-20251017(13h28m27s).dat
+2025-10-17 15:11:37 - __main__ - INFO - Application closing

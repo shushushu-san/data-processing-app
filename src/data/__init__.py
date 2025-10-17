@@ -3,6 +3,7 @@
 
 # Import data processing classes
 from .s1p_loader import S1PLoader, load_s1p_file
+from .dat_loader import DATLoader, load_dat_file
 # from .data_processor import DataProcessor
 # from .validator import FileValidator
 
@@ -14,6 +15,7 @@ FileValidator = None
 SUPPORTED_FORMATS = {
     '.s1p': 'S1P Network Analyzer Data',
     '.s2p': 'S2P Network Analyzer Data', 
+    '.dat': 'DAT Frequency Domain Data',
     '.vcf': 'Variant Call Format',
     '.bed': 'Browser Extensible Data',
     '.ped': 'PLINK PED format', 
@@ -21,4 +23,4 @@ SUPPORTED_FORMATS = {
     '.txt': 'Tab-delimited text'
 }
 
-__all__ = ['S1PLoader', 'load_s1p_file', 'DataProcessor', 'FileValidator', 'SUPPORTED_FORMATS']
+__all__ = ['S1PLoader', 'load_s1p_file', 'DATLoader', 'load_dat_file', 'DataProcessor', 'FileValidator', 'SUPPORTED_FORMATS']

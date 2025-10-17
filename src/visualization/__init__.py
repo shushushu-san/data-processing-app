@@ -3,6 +3,7 @@
 
 # Import visualization classes
 from .s1p_plots import S1PPlotter, show_s1p_plot_dialog, create_s1p_plotter
+from .dat_plots import DATPlotter, show_dat_plot_dialog, create_dat_plotter
 
 # Import other visualization classes (will be implemented later)  
 # from .plot_manager import PlotManager
@@ -45,6 +46,7 @@ EXPORT_FORMATS = {
 
 __all__ = [
     'S1PPlotter', 'show_s1p_plot_dialog', 'create_s1p_plotter',
+    'DATPlotter', 'show_dat_plot_dialog', 'create_dat_plotter',
     'PlotManager', 'ScatterPlot', 'Histogram', 'Heatmap',
     'DEFAULT_PLOT_CONFIG', 'COLOR_PALETTES', 'EXPORT_FORMATS'
 ]

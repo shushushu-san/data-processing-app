@@ -35,7 +35,7 @@ class SNPProcessorApp:
         # Application metadata
         self.app_name = "SNP Data Processor"
         self.version = "1.0.0"
-        self.supported_formats = ['.s1p', '.s2p', '.vcf', '.bed', '.ped', '.csv', '.txt']
+        self.supported_formats = ['.s1p', '.s2p', '.dat', '.vcf', '.bed', '.ped', '.csv', '.txt']
         
         # Initialize CustomTkinter theme
         self.setup_customtkinter()
@@ -322,6 +322,7 @@ class SNPProcessorApp:
         # Create file type filters
         filetypes = []
         filetypes.append(('S1P Files', '*.s1p'))
+        filetypes.append(('DAT Files', '*.dat'))
         filetypes.append(('All Supported', ';'.join([f'*{ext}' for ext in SUPPORTED_FORMATS.keys()])))
         filetypes.append(('All Files', '*.*'))
         
@@ -353,7 +354,7 @@ class SNPProcessorApp:
     
     def load_data_file(self, file_path):
         """Load a single data file based on its extension."""
-        from data import S1PLoader
+        from data import S1PLoader, DATLoader
         import os
         from datetime import datetime
         
@@ -382,6 +383,24 @@ class SNPProcessorApp:
             })
             
             self.logger.info(f"Loaded S1P file: {file_path.name}")
+            
+        elif extension == '.dat':
+            loader = DATLoader()
+            data_dict = loader.load_file(str(file_path))
+            
+            # Store loaded data
+            self.loaded_files.append({
+                'path': str(file_path),
+                'name': file_path.name,
+                'type': 'DAT',
+                'data': data_dict['data'],
+                'metadata': data_dict['metadata'],
+                'loader': loader,
+                'size': file_size,
+                'modified': modified_time
+            })
+            
+            self.logger.info(f"Loaded DAT file: {file_path.name}")
             
         else:
             raise ValueError(f"Unsupported file format: {extension}")
@@ -516,6 +535,8 @@ class SNPProcessorApp:
             file_info = self.loaded_files[self.selected_files[0]]
             if file_info['type'] == 'S1P':
                 properties_text = self._build_s1p_properties(file_info)
+            elif file_info['type'] == 'DAT':
+                properties_text = self._build_dat_properties(file_info)
             else:
                 properties_text = f"""File: {file_info['name']}
 Type: {file_info['type']}
@@ -532,6 +553,7 @@ Modified: {file_info.get('modified', 'Unknown')}"""
             properties_lines.append("")
             
             s1p_count = 0
+            dat_count = 0
             total_points = 0
             
             for i, file_idx in enumerate(self.selected_files, 1):
@@ -539,26 +561,39 @@ Modified: {file_info.get('modified', 'Unknown')}"""
                 properties_lines.append(f"{i}. {file_info['name']} ({file_info['type']})")
                 properties_lines.append(f"   Size: {file_info.get('size', 'Unknown')}")
                 
+                data = file_info.get('data')
+                if data is not None and not data.empty:
+                    points = len(data)
+                    properties_lines.append(f"   Data Points: {points}")
+                    total_points += points
+                
                 if file_info['type'] == 'S1P':
                     s1p_count += 1
-                    data = file_info.get('data')
                     if data is not None and not data.empty:
-                        points = len(data)
-                        properties_lines.append(f"   Data Points: {points}")
-                        total_points += points
-                        
                         if 'Frequency_GHz' in data.columns:
                             freq_min, freq_max = data['Frequency_GHz'].min(), data['Frequency_GHz'].max()
                             properties_lines.append(f"   Frequency: {freq_min:.3f} - {freq_max:.3f} GHz")
                 
+                elif file_info['type'] == 'DAT':
+                    dat_count += 1
+                    if data is not None and not data.empty:
+                        if 'Frequency_kHz' in data.columns:
+                            freq_min, freq_max = data['Frequency_kHz'].min(), data['Frequency_kHz'].max()
+                            properties_lines.append(f"   Frequency: {freq_min:.1f} - {freq_max:.1f} kHz")
+                
                 properties_lines.append("")
             
-            if s1p_count > 0:
-                properties_lines.append(f"=== S1P Summary ===")
-                properties_lines.append(f"S1P Files: {s1p_count}")
+            # File type summaries
+            if s1p_count > 0 or dat_count > 0:
+                properties_lines.append(f"=== File Type Summary ===")
+                if s1p_count > 0:
+                    properties_lines.append(f"S1P Files: {s1p_count}")
+                if dat_count > 0:
+                    properties_lines.append(f"DAT Files: {dat_count}")
                 properties_lines.append(f"Total Data Points: {total_points}")
-                if s1p_count > 1:
-                    properties_lines.append("Note: Multiple S1P files can be overlaid on the same graph")
+                
+                if s1p_count > 1 or dat_count > 1:
+                    properties_lines.append("Note: Multiple files of the same type can be overlaid on the same graph")
             
             self.properties_text.insert("1.0", "\n".join(properties_lines))
             # For multiple selection, set current_data to the first selected file's data
@@ -615,6 +650,68 @@ Modified: {file_info.get('modified', 'Unknown')}"""
         
         return "\n".join(properties_lines)
     
+    def _build_dat_properties(self, file_info):
+        """Build detailed properties text for DAT files."""
+        properties_lines = []
+        properties_lines.append(f"File: {file_info['name']}")
+        properties_lines.append(f"Type: {file_info['type']}")
+        properties_lines.append(f"Path: {file_info['path']}")
+        properties_lines.append(f"Size: {file_info.get('size', 'Unknown')}")
+        properties_lines.append(f"Modified: {file_info.get('modified', 'Unknown')}")
+        properties_lines.append("")
+        
+        # DAT specific metadata
+        metadata = file_info.get('metadata', {})
+        properties_lines.append("=== DAT File Properties ===")
+        properties_lines.append(f"Data Format: {metadata.get('data_format', 'Frequency Domain Measurement')}")
+        properties_lines.append(f"Frequency Unit: {metadata.get('frequency_unit', 'Hz')}")
+        properties_lines.append(f"Amplitude Unit: {metadata.get('amplitude_unit', 'V')}")
+        properties_lines.append(f"Phase Unit: {metadata.get('phase_unit', 'degrees')}")
+        
+        # Check for measurement info from filename
+        if metadata.get('measurement_date'):
+            properties_lines.append(f"Measurement Date: {metadata['measurement_date']}")
+        if metadata.get('measurement_id'):
+            properties_lines.append(f"Measurement ID: {metadata['measurement_id']}")
+        
+        properties_lines.append("")
+        
+        # Data summary
+        data = file_info.get('data')
+        if data is not None and not data.empty:
+            properties_lines.append("=== Data Summary ===")
+            properties_lines.append(f"Data Points: {len(data)}")
+            
+            if 'Frequency_kHz' in data.columns:
+                freq_min, freq_max = data['Frequency_kHz'].min(), data['Frequency_kHz'].max()
+                properties_lines.append(f"Frequency Range: {freq_min:.1f} - {freq_max:.1f} kHz")
+            
+            if 'Amplitude' in data.columns:
+                amp_min, amp_max = data['Amplitude'].min(), data['Amplitude'].max()
+                properties_lines.append(f"Amplitude Range: {amp_min:.3f} - {amp_max:.3f}")
+            
+            if 'Phase' in data.columns:
+                phase_min, phase_max = data['Phase'].min(), data['Phase'].max()
+                properties_lines.append(f"Phase Range: {phase_min:.1f} - {phase_max:.1f} °")
+            
+            # Frequency step calculation
+            if 'Frequency_Hz' in data.columns and len(data) > 1:
+                freq_step_hz = (data['Frequency_Hz'].iloc[1] - data['Frequency_Hz'].iloc[0])
+                properties_lines.append(f"Frequency Step: {freq_step_hz:.1f} Hz")
+            
+            # Check for average data
+            has_average = metadata.get('has_average_data', False)
+            properties_lines.append(f"Average Data: {'Available' if has_average else 'Not Available'}")
+            
+            if has_average and 'aveAmplitude' in data.columns:
+                ave_count = data['aveAmplitude'].notna().sum()
+                properties_lines.append(f"Average Data Points: {ave_count}")
+        else:
+            properties_lines.append("=== Data Summary ===")
+            properties_lines.append("No data available or data is empty")
+        
+        return "\n".join(properties_lines)
+    
     def create_graph_for_selected(self):
         """Create a graph for the currently selected files."""
         if not self.selected_files:
@@ -624,27 +721,51 @@ Modified: {file_info.get('modified', 'Unknown')}"""
         # Get selected file objects
         selected_file_objects = [self.loaded_files[i] for i in self.selected_files]
         
-        # Check if all selected files are S1P
+        # Check file types
         s1p_files = [f for f in selected_file_objects if f.get('type') == 'S1P']
+        dat_files = [f for f in selected_file_objects if f.get('type') == 'DAT']
         
-        if not s1p_files:
-            messagebox.showwarning("Unsupported Files", "No S1P files are selected. Please select S1P files to create graphs.")
+        if not s1p_files and not dat_files:
+            messagebox.showwarning("Unsupported Files", "No S1P or DAT files are selected. Please select supported files to create graphs.")
             return
         
-        if len(s1p_files) != len(selected_file_objects):
-            non_s1p_files = [f for f in selected_file_objects if f.get('type') != 'S1P']
-            file_names = [f['name'] for f in non_s1p_files]
-            messagebox.showwarning("Mixed File Types", 
-                                 f"Only S1P files will be graphed. The following files will be ignored:\n{', '.join(file_names)}")
+        # Handle mixed file types
+        if s1p_files and dat_files:
+            # User has mixed file types - ask which to plot
+            from tkinter import simpledialog
+            choice = messagebox.askyesnocancel("Mixed File Types", 
+                                             f"You have selected both S1P ({len(s1p_files)}) and DAT ({len(dat_files)}) files.\n"
+                                             "Click Yes to plot S1P files, No to plot DAT files, or Cancel to abort.")
+            if choice is None:  # Cancel
+                return
+            elif choice:  # Yes - plot S1P
+                target_files = s1p_files
+                file_type = 'S1P'
+            else:  # No - plot DAT
+                target_files = dat_files
+                file_type = 'DAT'
+        elif s1p_files:
+            target_files = s1p_files
+            file_type = 'S1P'
+        else:
+            target_files = dat_files
+            file_type = 'DAT'
         
-        if len(s1p_files) == 1:
+        # Create appropriate graph
+        if len(target_files) == 1:
             # Single file - use existing method
-            self.logger.info(f"Creating graph for selected S1P file: {s1p_files[0]['name']}")
-            self.create_s1p_plot_for_file(s1p_files[0])
+            self.logger.info(f"Creating graph for selected {file_type} file: {target_files[0]['name']}")
+            if file_type == 'S1P':
+                self.create_s1p_plot_for_file(target_files[0])
+            else:
+                self.create_dat_plot_for_file(target_files[0])
         else:
             # Multiple files - create overlaid graph
-            self.logger.info(f"Creating overlaid graph for {len(s1p_files)} S1P files")
-            self.create_s1p_overlay_plot(s1p_files)
+            self.logger.info(f"Creating overlaid graph for {len(target_files)} {file_type} files")
+            if file_type == 'S1P':
+                self.create_s1p_overlay_plot(target_files)
+            else:
+                self.create_dat_overlay_plot(target_files)
     
     def create_s1p_plot_for_file(self, file_info):
         """Create S1P plot for a specific file."""
@@ -735,6 +856,102 @@ Modified: {file_info.get('modified', 'Unknown')}"""
         except Exception as e:
             file_names = [f['name'] for f in s1p_files]
             self.logger.error(f"Error creating S1P overlay plot for files {file_names}: {e}")
+            messagebox.showerror("Plot Error", f"Failed to create overlay plot:\n{str(e)}")
+    
+    def create_dat_plot_for_file(self, file_info):
+        """Create DAT plot for a specific file."""
+        from visualization import DATPlotter, show_dat_plot_dialog
+        
+        try:
+            # Show plot selection dialog
+            plot_config = show_dat_plot_dialog(self.root, file_info['data'], file_info['metadata'])
+            
+            if plot_config is None:
+                return  # User cancelled
+            
+            # Create plotter
+            plotter = DATPlotter()
+            
+            # Create the requested plot
+            plot_type = plot_config['plot_type']
+            
+            if plot_type == "custom":
+                figure = plotter.create_custom_plot(
+                    file_info['data'], 
+                    file_info['metadata'],
+                    plot_config['x_axis'],
+                    plot_config['y_axis']
+                )
+            elif plot_type == "freq_amp":
+                figure = plotter.create_amplitude_plot(file_info['data'], file_info['metadata'])
+            elif plot_type == "freq_phase":
+                figure = plotter.create_phase_plot(file_info['data'], file_info['metadata'])
+            elif plot_type == "combined":
+                figure = plotter.create_combined_plot(file_info['data'], file_info['metadata'])
+            else:
+                messagebox.showerror("Error", f"Unknown plot type: {plot_type}")
+                return
+            
+            # Embed in GUI (find the graph display area)
+            graph_frame = self.find_graph_display_frame()
+            if graph_frame:
+                plotter.embed_in_tkinter(graph_frame)
+                self.logger.info(f"Successfully created {plot_type} plot for {file_info['name']}")
+            else:
+                messagebox.showerror("Error", "Could not find graph display area.")
+                self.logger.error("Could not find graph display frame")
+            
+        except Exception as e:
+            self.logger.error(f"Error creating DAT plot for {file_info['name']}: {e}")
+            messagebox.showerror("Plot Error", f"Failed to create plot for {file_info['name']}:\n{str(e)}")
+    
+    def create_dat_overlay_plot(self, dat_files):
+        """Create overlaid DAT plots for multiple files."""
+        from visualization import DATPlotter, show_dat_plot_dialog
+        
+        try:
+            # Use the first file's data and metadata for the dialog
+            first_file = dat_files[0]
+            plot_config = show_dat_plot_dialog(self.root, first_file['data'], first_file['metadata'])
+            
+            if plot_config is None:
+                return  # User cancelled
+            
+            # Create plotter
+            plotter = DATPlotter()
+            
+            # Create the overlaid plot
+            plot_type = plot_config['plot_type']
+            
+            if plot_type == "custom":
+                figure = plotter.create_custom_overlay_plot(
+                    dat_files,
+                    plot_config['x_axis'],
+                    plot_config['y_axis']
+                )
+            elif plot_type == "freq_amp":
+                figure = plotter.create_amplitude_overlay_plot(dat_files)
+            elif plot_type == "freq_phase":
+                figure = plotter.create_phase_overlay_plot(dat_files)
+            elif plot_type == "combined":
+                figure = plotter.create_combined_overlay_plot(dat_files)
+            else:
+                messagebox.showerror("Error", f"Unknown plot type: {plot_type}")
+                return
+            
+            # Embed in GUI
+            graph_frame = self.find_graph_display_frame()
+            if graph_frame:
+                plotter.embed_in_tkinter(graph_frame)
+                file_names = [f['name'] for f in dat_files]
+                self.logger.info(f"Successfully created {plot_type} overlay plot for files: {', '.join(file_names)}")
+            else:
+                messagebox.showerror("Error", "Could not find graph display area.")
+                self.logger.error("Could not find graph display frame")
+            
+        except Exception as e:
+            file_names = [f['name'] for f in dat_files]
+            self.logger.error(f"Error creating DAT overlay plot for files {file_names}: {e}")
             messagebox.showerror("Plot Error", f"Failed to create overlay plot:\n{str(e)}")
     
     def save_project(self):
