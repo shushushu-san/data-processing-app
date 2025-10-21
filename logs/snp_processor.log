@@ -279,3 +279,250 @@
 2025-10-17 14:32:58 - __main__ - INFO - Theme changed to: light
 2025-10-17 14:32:59 - __main__ - INFO - Selected file: 20251017-1.s1p
 2025-10-17 14:33:04 - __main__ - INFO - Application closing
+2025-10-17 15:15:47 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 15:15:47 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 15:15:47 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 15:15:47 - __main__ - INFO - Basic drop zone setup (drag and drop requires tkinterdnd2 package)
+2025-10-17 15:15:48 - __main__ - INFO - Main window created successfully
+2025-10-17 15:15:48 - __main__ - INFO - Application started successfully
+2025-10-17 15:17:54 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 15:17:54 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 15:17:54 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 15:17:54 - __main__ - INFO - Basic drop zone setup (drag and drop requires tkinterdnd2 package)
+2025-10-17 15:17:55 - __main__ - INFO - Main window created successfully
+2025-10-17 15:17:55 - __main__ - INFO - Application started successfully
+2025-10-17 15:18:15 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\programs\data-processing-app\data-processing-app\data\20251014-1.s1p
+2025-10-17 15:18:15 - data.s1p_loader - INFO - Successfully loaded S1P file with 201 data points
+2025-10-17 15:18:15 - __main__ - INFO - Loaded S1P file: 20251014-1.s1p
+2025-10-17 15:18:16 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-17 15:19:46 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 15:19:46 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 15:19:46 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 15:19:46 - __main__ - INFO - Basic drop zone setup (drag and drop requires tkinterdnd2 package)
+2025-10-17 15:19:46 - __main__ - INFO - Main window created successfully
+2025-10-17 15:19:46 - __main__ - INFO - Application started successfully
+2025-10-17 15:21:27 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 15:21:27 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 15:21:27 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 15:21:27 - __main__ - INFO - Drag and drop setup failed: No module named 'tkinterdnd2'. Using basic drop zone.
+2025-10-17 15:21:28 - __main__ - INFO - Main window created successfully
+2025-10-17 15:21:28 - __main__ - INFO - Application started successfully
+2025-10-17 15:21:42 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\programs\data-processing-app\data-processing-app\data\20251014-1.s1p
+2025-10-17 15:21:42 - data.s1p_loader - INFO - Successfully loaded S1P file with 201 data points
+2025-10-17 15:21:42 - __main__ - INFO - Loaded S1P file: 20251014-1.s1p
+2025-10-17 15:21:47 - __main__ - INFO - Import completed: 1/1 files loaded
+2025-10-17 15:21:50 - __main__ - INFO - Application closing
+2025-10-17 15:22:33 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 15:22:33 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 15:22:33 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 15:22:33 - __main__ - INFO - Drag and drop setup failed: module 'tkinterdnd2.TkinterDnD' has no attribute 'TkinterDnD'. Using basic drop zone.
+2025-10-17 15:22:34 - __main__ - INFO - Main window created successfully
+2025-10-17 15:22:34 - __main__ - INFO - Application started successfully
+2025-10-17 15:22:45 - __main__ - INFO - Application closing
+2025-10-17 15:23:06 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 15:23:06 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 15:23:06 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 15:23:06 - __main__ - INFO - Drag and drop setup failed: can't find package tkdnd. Using basic drop zone.
+2025-10-17 15:23:07 - __main__ - INFO - Main window created successfully
+2025-10-17 15:23:07 - __main__ - INFO - Application started successfully
+2025-10-17 15:24:41 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 15:24:41 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 15:24:41 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 15:24:41 - __main__ - INFO - Drag and drop setup failed: can't find package tkdnd. Using basic drop zone.
+2025-10-17 15:24:41 - __main__ - INFO - Main window created successfully
+2025-10-17 15:24:41 - __main__ - INFO - Application started successfully
+2025-10-17 15:25:07 - __main__ - INFO - Application closing
+2025-10-17 15:26:29 - root - INFO - Logging initialized - Level: INFO
+2025-10-17 15:26:29 - root - INFO - Log file: logs\snp_processor.log
+2025-10-17 15:26:29 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-17 15:26:30 - __main__ - INFO - Main window created successfully
+2025-10-17 15:26:30 - __main__ - INFO - Application started successfully
+2025-10-17 15:26:33 - __main__ - INFO - Application closing
+2025-10-21 10:27:35 - root - INFO - Logging initialized - Level: INFO
+2025-10-21 10:27:35 - root - INFO - Log file: logs\snp_processor.log
+2025-10-21 10:27:35 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-21 10:27:36 - __main__ - INFO - Main window created successfully
+2025-10-21 10:27:36 - __main__ - INFO - Application started successfully
+2025-10-21 10:31:49 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-1.s1p
+2025-10-21 10:31:49 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 10:31:49 - __main__ - INFO - Loaded S1P file: 20251017-1.s1p
+2025-10-21 10:31:49 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-2.s1p
+2025-10-21 10:31:49 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 10:31:49 - __main__ - INFO - Loaded S1P file: 20251017-2.s1p
+2025-10-21 10:31:49 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-3.s1p
+2025-10-21 10:31:49 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 10:31:49 - __main__ - INFO - Loaded S1P file: 20251017-3.s1p
+2025-10-21 10:31:51 - __main__ - INFO - Import completed: 3/3 files loaded
+2025-10-21 10:31:53 - __main__ - INFO - Selected file: 20251017-1.s1p
+2025-10-21 10:31:54 - __main__ - INFO - Selected file: 20251017-2.s1p
+2025-10-21 10:31:55 - __main__ - INFO - Selected file: 20251017-3.s1p
+2025-10-21 10:31:58 - __main__ - INFO - Creating overlaid graph for 3 S1P files
+2025-10-21 10:32:04 - visualization.s1p_plots - INFO - Created overlaid S11 magnitude plot for 3 files
+2025-10-21 10:32:04 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-21 10:32:04 - __main__ - INFO - Successfully created magnitude overlay plot for files: 20251017-1.s1p, 20251017-2.s1p, 20251017-3.s1p
+2025-10-21 10:38:08 - __main__ - INFO - Theme changed to: dark
+2025-10-21 10:38:14 - __main__ - INFO - Theme changed to: light
+2025-10-21 10:40:10 - __main__ - INFO - Deselected file: 20251017-3.s1p
+2025-10-21 10:40:11 - __main__ - INFO - Deselected file: 20251017-2.s1p
+2025-10-21 10:40:12 - __main__ - INFO - Deselected file: 20251017-1.s1p
+2025-10-21 10:40:51 - data.dat_loader - INFO - Loading DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-21 10:40:51 - data.dat_loader - INFO - Read DAT file: 72 rows, 6 columns
+2025-10-21 10:40:51 - data.dat_loader - INFO - Data processing completed
+2025-10-21 10:40:51 - data.dat_loader - INFO - Successfully loaded DAT file with 72 data points
+2025-10-21 10:40:51 - __main__ - INFO - Loaded DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-21 10:40:51 - data.dat_loader - INFO - Loading DAT file: 20251017-2-20251017(13h32m31s).dat
+2025-10-21 10:40:51 - data.dat_loader - INFO - Read DAT file: 72 rows, 6 columns
+2025-10-21 10:40:51 - data.dat_loader - INFO - Data processing completed
+2025-10-21 10:40:51 - data.dat_loader - INFO - Successfully loaded DAT file with 72 data points
+2025-10-21 10:40:51 - __main__ - INFO - Loaded DAT file: 20251017-2-20251017(13h32m31s).dat
+2025-10-21 10:40:51 - data.dat_loader - INFO - Loading DAT file: 20251017-3-20251017(13h35m21s).dat
+2025-10-21 10:40:51 - data.dat_loader - INFO - Read DAT file: 72 rows, 6 columns
+2025-10-21 10:40:51 - data.dat_loader - INFO - Data processing completed
+2025-10-21 10:40:51 - data.dat_loader - INFO - Successfully loaded DAT file with 72 data points
+2025-10-21 10:40:51 - __main__ - INFO - Loaded DAT file: 20251017-3-20251017(13h35m21s).dat
+2025-10-21 10:40:53 - __main__ - INFO - Import completed: 3/3 files loaded
+2025-10-21 10:41:04 - __main__ - INFO - Selected file: 20251017-1-20251017(13h28m27s).dat
+2025-10-21 10:41:05 - __main__ - INFO - Selected file: 20251017-2-20251017(13h32m31s).dat
+2025-10-21 10:41:06 - __main__ - INFO - Selected file: 20251017-3-20251017(13h35m21s).dat
+2025-10-21 10:41:08 - __main__ - INFO - Creating overlaid graph for 3 DAT files
+2025-10-21 10:41:22 - visualization.dat_plots - INFO - Created overlaid amplitude plot for 3 files
+2025-10-21 10:41:22 - visualization.dat_plots - INFO - Plot embedded in Tkinter frame
+2025-10-21 10:41:22 - __main__ - INFO - Successfully created freq_amp overlay plot for files: 20251017-1-20251017(13h28m27s).dat, 20251017-2-20251017(13h32m31s).dat, 20251017-3-20251017(13h35m21s).dat
+2025-10-21 10:48:08 - __main__ - INFO - Deselected file: 20251017-3-20251017(13h35m21s).dat
+2025-10-21 10:48:09 - __main__ - INFO - Deselected file: 20251017-2-20251017(13h32m31s).dat
+2025-10-21 10:48:09 - __main__ - INFO - Deselected file: 20251017-1-20251017(13h28m27s).dat
+2025-10-21 10:48:10 - __main__ - INFO - Selected file: 20251017-3.s1p
+2025-10-21 10:48:10 - __main__ - INFO - Selected file: 20251017-2.s1p
+2025-10-21 10:48:11 - __main__ - INFO - Selected file: 20251017-1.s1p
+2025-10-21 10:48:13 - __main__ - INFO - Creating overlaid graph for 3 S1P files
+2025-10-21 10:48:14 - visualization.s1p_plots - INFO - Created overlaid S11 magnitude plot for 3 files
+2025-10-21 10:48:14 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-21 10:48:14 - __main__ - INFO - Successfully created magnitude overlay plot for files: 20251017-3.s1p, 20251017-2.s1p, 20251017-1.s1p
+2025-10-21 11:10:23 - root - INFO - Logging initialized - Level: INFO
+2025-10-21 11:10:23 - root - INFO - Log file: logs\snp_processor.log
+2025-10-21 11:10:23 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-21 11:10:25 - __main__ - INFO - Main window created successfully
+2025-10-21 11:10:25 - __main__ - INFO - Application started successfully
+2025-10-21 11:11:15 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-1.s1p
+2025-10-21 11:11:15 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:11:15 - __main__ - INFO - Loaded S1P file: 20251017-1.s1p
+2025-10-21 11:11:15 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-2.s1p
+2025-10-21 11:11:15 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:11:15 - __main__ - INFO - Loaded S1P file: 20251017-2.s1p
+2025-10-21 11:11:15 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-3.s1p
+2025-10-21 11:11:15 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:11:15 - __main__ - INFO - Loaded S1P file: 20251017-3.s1p
+2025-10-21 11:11:17 - __main__ - INFO - Import completed: 3/3 files loaded
+2025-10-21 11:11:22 - __main__ - INFO - Selected file: 20251017-3.s1p
+2025-10-21 11:11:24 - __main__ - INFO - Selected file: 20251017-1.s1p
+2025-10-21 11:11:57 - __main__ - INFO - Application closing
+2025-10-21 11:12:01 - root - INFO - Logging initialized - Level: INFO
+2025-10-21 11:12:01 - root - INFO - Log file: logs\snp_processor.log
+2025-10-21 11:12:01 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-21 11:12:02 - __main__ - INFO - Main window created successfully
+2025-10-21 11:12:02 - __main__ - INFO - Application started successfully
+2025-10-21 11:12:21 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-1.s1p
+2025-10-21 11:12:21 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:12:21 - __main__ - INFO - Loaded S1P file: 20251017-1.s1p
+2025-10-21 11:12:21 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-2.s1p
+2025-10-21 11:12:21 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:12:21 - __main__ - INFO - Loaded S1P file: 20251017-2.s1p
+2025-10-21 11:12:21 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-3.s1p
+2025-10-21 11:12:21 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:12:21 - __main__ - INFO - Loaded S1P file: 20251017-3.s1p
+2025-10-21 11:12:22 - __main__ - INFO - Import completed: 3/3 files loaded
+2025-10-21 11:12:24 - __main__ - INFO - Selected file: 20251017-1.s1p
+2025-10-21 11:12:25 - __main__ - INFO - Selected file: 20251017-2.s1p
+2025-10-21 11:12:25 - __main__ - INFO - Selected file: 20251017-3.s1p
+2025-10-21 11:12:32 - __main__ - INFO - Deselected file: 20251017-2.s1p
+2025-10-21 11:12:36 - __main__ - INFO - Deselected file: 20251017-3.s1p
+2025-10-21 11:12:37 - __main__ - INFO - Deselected file: 20251017-1.s1p
+2025-10-21 11:12:55 - __main__ - INFO - Selected file: 20251017-1.s1p
+2025-10-21 11:12:55 - __main__ - INFO - Selected file: 20251017-2.s1p
+2025-10-21 11:12:56 - __main__ - INFO - Selected file: 20251017-3.s1p
+2025-10-21 11:12:58 - __main__ - INFO - Creating overlaid graph for 3 S1P files
+2025-10-21 11:13:00 - visualization.s1p_plots - INFO - Created overlaid S11 magnitude plot for 3 files
+2025-10-21 11:13:00 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-21 11:13:00 - __main__ - INFO - Successfully created magnitude overlay plot for files: 20251017-1.s1p, 20251017-2.s1p, 20251017-3.s1p
+2025-10-21 11:16:43 - __main__ - INFO - Application closing
+2025-10-21 11:16:47 - root - INFO - Logging initialized - Level: INFO
+2025-10-21 11:16:47 - root - INFO - Log file: logs\snp_processor.log
+2025-10-21 11:16:47 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-21 11:16:47 - __main__ - INFO - Main window created successfully
+2025-10-21 11:16:47 - __main__ - INFO - Application started successfully
+2025-10-21 11:17:10 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-1.s1p
+2025-10-21 11:17:10 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:17:10 - __main__ - INFO - Loaded S1P file: 20251017-1.s1p
+2025-10-21 11:17:10 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-2.s1p
+2025-10-21 11:17:10 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:17:10 - __main__ - INFO - Loaded S1P file: 20251017-2.s1p
+2025-10-21 11:17:10 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-3.s1p
+2025-10-21 11:17:10 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:17:10 - __main__ - INFO - Loaded S1P file: 20251017-3.s1p
+2025-10-21 11:17:11 - __main__ - INFO - Import completed: 3/3 files loaded
+2025-10-21 11:18:27 - visualization.difference_plots - INFO - Created S1P magnitude difference plot
+2025-10-21 11:18:27 - visualization.difference_plots - INFO - Plot embedded in Tkinter frame
+2025-10-21 11:18:27 - __main__ - INFO - Successfully created difference plot: S1P Difference: 20251017-1.s1p - 20251017-2.s1p
+2025-10-21 11:20:03 - visualization.difference_plots - INFO - Created S1P magnitude difference plot
+2025-10-21 11:20:03 - visualization.difference_plots - INFO - Plot embedded in Tkinter frame
+2025-10-21 11:20:03 - __main__ - INFO - Successfully created difference plot: S1P Difference: 20251017-3.s1p - 20251017-1.s1p
+2025-10-21 11:22:58 - visualization.difference_plots - INFO - Created S1P magnitude difference plot
+2025-10-21 11:22:58 - visualization.difference_plots - INFO - Plot embedded in Tkinter frame
+2025-10-21 11:22:58 - __main__ - INFO - Successfully created difference plot: S1P Difference: 20251017-1.s1p - 20251017-2.s1p
+2025-10-21 11:23:53 - visualization.difference_plots - INFO - Created S1P magnitude difference plot
+2025-10-21 11:23:53 - visualization.difference_plots - INFO - Plot embedded in Tkinter frame
+2025-10-21 11:23:53 - __main__ - INFO - Successfully created difference plot: S1P Difference: 20251017-1.s1p - 20251017-3.s1p
+2025-10-21 11:25:27 - __main__ - INFO - Selected file: 20251017-3.s1p
+2025-10-21 11:25:28 - __main__ - INFO - Deselected file: 20251017-3.s1p
+2025-10-21 11:25:32 - __main__ - INFO - Selected file: 20251017-3.s1p
+2025-10-21 11:25:33 - __main__ - INFO - Deselected file: 20251017-3.s1p
+2025-10-21 11:25:34 - __main__ - INFO - Selected file: 20251017-2.s1p
+2025-10-21 11:25:35 - __main__ - INFO - Deselected file: 20251017-2.s1p
+2025-10-21 11:25:35 - __main__ - INFO - Selected file: 20251017-1.s1p
+2025-10-21 11:25:36 - __main__ - INFO - Deselected file: 20251017-1.s1p
+2025-10-21 11:26:18 - root - INFO - Logging initialized - Level: INFO
+2025-10-21 11:26:18 - root - INFO - Log file: logs\snp_processor.log
+2025-10-21 11:26:18 - __main__ - INFO - Starting SNP Data Processor v1.0.0
+2025-10-21 11:26:18 - __main__ - INFO - Main window created successfully
+2025-10-21 11:26:18 - __main__ - INFO - Application started successfully
+2025-10-21 11:26:23 - __main__ - INFO - Application closing
+2025-10-21 11:26:47 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-1.s1p
+2025-10-21 11:26:47 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:26:47 - __main__ - INFO - Loaded S1P file: 20251017-1.s1p
+2025-10-21 11:26:47 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-2.s1p
+2025-10-21 11:26:47 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:26:47 - __main__ - INFO - Loaded S1P file: 20251017-2.s1p
+2025-10-21 11:26:47 - data.s1p_loader - INFO - Loading S1P file: C:\Users\gents\1.University\Laboratory\research\result\NetworkAnalyzer\20251017VNA\20251017-3.s1p
+2025-10-21 11:26:47 - data.s1p_loader - INFO - Successfully loaded S1P file with 10000 data points
+2025-10-21 11:26:47 - __main__ - INFO - Loaded S1P file: 20251017-3.s1p
+2025-10-21 11:26:49 - __main__ - INFO - Import completed: 3/3 files loaded
+2025-10-21 11:26:58 - visualization.difference_plots - INFO - Created S1P magnitude difference plot
+2025-10-21 11:26:58 - visualization.difference_plots - INFO - Plot embedded in Tkinter frame
+2025-10-21 11:26:58 - __main__ - INFO - Successfully created difference plot: S1P Difference: 20251017-1.s1p - 20251017-2.s1p
+2025-10-21 12:32:56 - __main__ - INFO - Selected file: 20251017-1.s1p
+2025-10-21 12:32:59 - __main__ - INFO - Deselected file: 20251017-1.s1p
+2025-10-21 12:38:29 - __main__ - INFO - Application closing
+2025-10-21 12:38:54 - data.dat_loader - INFO - Loading DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-21 12:38:54 - data.dat_loader - INFO - Read DAT file: 72 rows, 6 columns
+2025-10-21 12:38:54 - data.dat_loader - INFO - Data processing completed
+2025-10-21 12:38:54 - data.dat_loader - INFO - Successfully loaded DAT file with 72 data points
+2025-10-21 12:38:54 - __main__ - INFO - Loaded DAT file: 20251017-1-20251017(13h28m27s).dat
+2025-10-21 12:38:54 - data.dat_loader - INFO - Loading DAT file: 20251017-2-20251017(13h32m31s).dat
+2025-10-21 12:38:54 - data.dat_loader - INFO - Read DAT file: 72 rows, 6 columns
+2025-10-21 12:38:54 - data.dat_loader - INFO - Data processing completed
+2025-10-21 12:38:54 - data.dat_loader - INFO - Successfully loaded DAT file with 72 data points
+2025-10-21 12:38:54 - __main__ - INFO - Loaded DAT file: 20251017-2-20251017(13h32m31s).dat
+2025-10-21 12:38:54 - data.dat_loader - INFO - Loading DAT file: 20251017-3-20251017(13h35m21s).dat
+2025-10-21 12:38:54 - data.dat_loader - INFO - Read DAT file: 72 rows, 6 columns
+2025-10-21 12:38:54 - data.dat_loader - INFO - Data processing completed
+2025-10-21 12:38:54 - data.dat_loader - INFO - Successfully loaded DAT file with 72 data points
+2025-10-21 12:38:54 - __main__ - INFO - Loaded DAT file: 20251017-3-20251017(13h35m21s).dat
+2025-10-21 12:38:56 - __main__ - INFO - Import completed: 3/3 files loaded
+2025-10-21 12:50:06 - __main__ - INFO - Selected file: 20251017-1.s1p
+2025-10-21 12:50:08 - __main__ - INFO - Selected file: 20251017-2.s1p
+2025-10-21 12:50:09 - __main__ - INFO - Selected file: 20251017-3.s1p
+2025-10-21 12:50:11 - __main__ - INFO - Creating overlaid graph for 3 S1P files
+2025-10-21 12:50:14 - visualization.s1p_plots - INFO - Created overlaid S11 magnitude plot for 3 files
+2025-10-21 12:50:14 - visualization.s1p_plots - INFO - Plot embedded in Tkinter frame
+2025-10-21 12:50:14 - __main__ - INFO - Successfully created magnitude overlay plot for files: 20251017-1.s1p, 20251017-2.s1p, 20251017-3.s1p
+2025-10-21 16:11:38 - __main__ - INFO - Application closing

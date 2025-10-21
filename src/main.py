@@ -165,6 +165,8 @@ class SNPProcessorApp:
         graph_menu.add_command(label="Scatter Plot", command=self.create_scatter_plot)
         graph_menu.add_command(label="Histogram", command=self.create_histogram)
         graph_menu.add_command(label="Heatmap", command=self.create_heatmap)
+        graph_menu.add_separator()
+        graph_menu.add_command(label="Calculate Difference", command=self.create_difference_plot)
         
         # View menu
         view_menu = tk.Menu(menubar, tearoff=0)
@@ -246,6 +248,18 @@ class SNPProcessorApp:
         )
         self.create_graph_button.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
         
+        # Calculate difference button
+        self.diff_button = ctk.CTkButton(
+            buttons_frame,
+            text="Calculate Difference",
+            command=self.create_difference_plot,
+            height=35,
+            corner_radius=8,
+            font=ctk.CTkFont(size=12, weight="bold"),
+            fg_color=("orange", "darkorange")
+        )
+        self.diff_button.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
+        
         # Theme toggle button
         self.theme_button = ctk.CTkButton(
             buttons_frame,
@@ -257,15 +271,15 @@ class SNPProcessorApp:
             font=ctk.CTkFont(size=10),
             fg_color=("gray70", "gray30")
         )
-        self.theme_button.grid(row=2, column=0, sticky="ew", padx=5, pady=(0, 5))
+        self.theme_button.grid(row=3, column=0, sticky="ew", padx=5, pady=(0, 5))
         
         # Properties section
         props_label = ctk.CTkLabel(parent, text="Properties", font=ctk.CTkFont(size=14, weight="bold"))
-        props_label.grid(row=3, column=0, sticky="w", padx=15, pady=(10, 5))
+        props_label.grid(row=4, column=0, sticky="w", padx=15, pady=(10, 5))
         
         # Properties text area
         self.properties_text = ctk.CTkTextbox(parent, height=200, state="disabled")
-        self.properties_text.grid(row=4, column=0, sticky="nsew", padx=15, pady=(0, 15))
+        self.properties_text.grid(row=5, column=0, sticky="nsew", padx=15, pady=(0, 15))
         
         # Store file list for management
         self.loaded_files_widgets = []
@@ -371,12 +385,15 @@ class SNPProcessorApp:
             data_dict = loader.load_file(str(file_path))
             
             # Store loaded data
+            metadata = data_dict['metadata'].copy()
+            metadata['filename'] = file_path.name  # Ensure filename is in metadata
+            
             self.loaded_files.append({
                 'path': str(file_path),
                 'name': file_path.name,
                 'type': 'S1P',
                 'data': data_dict['data'],
-                'metadata': data_dict['metadata'],
+                'metadata': metadata,
                 'loader': loader,
                 'size': file_size,
                 'modified': modified_time
@@ -389,12 +406,15 @@ class SNPProcessorApp:
             data_dict = loader.load_file(str(file_path))
             
             # Store loaded data
+            metadata = data_dict['metadata'].copy()
+            metadata['filename'] = file_path.name  # Ensure filename is in metadata
+            
             self.loaded_files.append({
                 'path': str(file_path),
                 'name': file_path.name,
                 'type': 'DAT',
                 'data': data_dict['data'],
-                'metadata': data_dict['metadata'],
+                'metadata': metadata,
                 'loader': loader,
                 'size': file_size,
                 'modified': modified_time
@@ -1197,6 +1217,113 @@ Modified: {file_info.get('modified', 'Unknown')}"""
             self.set_theme("light")
         else:
             self.set_theme("dark")
+    
+    def create_difference_plot(self):
+        """Create a difference plot between two selected datasets."""
+        from visualization import DifferencePlotter, show_difference_dialog
+        
+        try:
+            # Check if we have at least 2 files loaded
+            if len(self.loaded_files) < 2:
+                messagebox.showwarning("Insufficient Data", 
+                                     "Please load at least 2 files to calculate differences.")
+                return
+            
+            # Show difference selection dialog
+            diff_config = show_difference_dialog(self.root, self.loaded_files)
+            
+            if diff_config is None:
+                return  # User cancelled
+            
+            # Create difference plotter
+            plotter = DifferencePlotter()
+            
+            # Extract file data
+            file1 = diff_config['file1']
+            file2 = diff_config['file2']
+            file_type = diff_config['file_type']
+            
+            # Create appropriate difference plot
+            if file_type == "s1p":
+                figure = plotter.create_s1p_difference_plot(
+                    file1['data'], file2['data'],
+                    file1['metadata'], file2['metadata'],
+                    diff_config['difference_type']
+                )
+                plot_title = f"S1P Difference: {file1['name']} - {file2['name']}"
+            
+            elif file_type == "dat":
+                figure = plotter.create_dat_difference_plot(
+                    file1['data'], file2['data'],
+                    file1['metadata'], file2['metadata'],
+                    diff_config['x_column'], diff_config['y_column']
+                )
+                plot_title = f"DAT Difference: {file1['name']} - {file2['name']}"
+            
+            else:
+                messagebox.showerror("Error", f"Unknown file type: {file_type}")
+                return
+            
+            # Embed in GUI
+            graph_frame = self.find_graph_display_frame()
+            if graph_frame:
+                plotter.embed_in_tkinter(graph_frame)
+                self.logger.info(f"Successfully created difference plot: {plot_title}")
+                
+                # Store the plotter for potential saving
+                self.current_plotter = plotter
+                
+                # Show success message with options
+                result = messagebox.askyesno("Success", 
+                                           f"Difference plot created successfully!\n\n{plot_title}\n\nWould you like to save the difference data to a file?")
+                
+                if result:
+                    self.save_difference_data(plotter, plot_title)
+                    
+            else:
+                messagebox.showerror("Error", "Could not find graph display area.")
+                self.logger.error("Could not find graph display frame")
+        
+        except Exception as e:
+            self.logger.error(f"Error creating difference plot: {e}")
+            messagebox.showerror("Error", f"Failed to create difference plot:\n{str(e)}")
+    
+    def save_difference_data(self, plotter, plot_title):
+        """Save difference data to a file."""
+        from tkinter import filedialog
+        
+        try:
+            if plotter.current_data is None:
+                messagebox.showerror("Error", "No difference data to save.")
+                return
+            
+            # Ask user for save location
+            filename = filedialog.asksaveasfilename(
+                title="Save Difference Data",
+                defaultextension=".csv",
+                filetypes=[
+                    ("CSV files", "*.csv"),
+                    ("Excel files", "*.xlsx"),
+                    ("Text files", "*.txt"),
+                    ("All files", "*.*")
+                ]
+            )
+            
+            if filename:
+                # Save data based on file extension
+                if filename.lower().endswith('.xlsx'):
+                    plotter.current_data.to_excel(filename, index=False)
+                elif filename.lower().endswith('.txt'):
+                    plotter.current_data.to_csv(filename, sep='\t', index=False)
+                else:  # Default to CSV
+                    plotter.current_data.to_csv(filename, index=False)
+                
+                self.logger.info(f"Difference data saved to: {filename}")
+                messagebox.showinfo("Saved", f"Difference data saved to:\n{filename}")
+        
+        except Exception as e:
+            self.logger.error(f"Error saving difference data: {e}")
+            messagebox.showerror("Error", f"Failed to save difference data:\n{str(e)}")
     
     def on_closing(self):
         """Handle application closing."""
